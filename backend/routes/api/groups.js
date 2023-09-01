@@ -10,6 +10,7 @@ const { requireAuth } = require("../../utils/auth.js");
 
 const { check } = require("express-validator");
 const { handleValidationErrors } = require("../../utils/validation");
+const e = require("express");
 
 const validateCreateGroup = [
   check("name")
@@ -294,7 +295,6 @@ router.put("/:groupId", requireAuth, validateCreateGroup, async (req, res) => {
 //Delete a group
 router.delete("/:groupId", requireAuth, async (req, res) => {
   const group = await Group.findByPk(req.params.groupId);
-  console.log(group);
   if (!group) {
     res.status(404);
     return res.json({
@@ -313,6 +313,54 @@ router.delete("/:groupId", requireAuth, async (req, res) => {
     return res.json({
       message: "Successfully deleted",
     });
+  }
+});
+
+//Get all Venues for a Group specified by its id
+router.get("/:groupId/venues", async (req, res) => {
+  const group = await Group.findOne({
+    where: {
+      id: req.params.groupId,
+    },
+    include: {
+      model: Venue,
+      attributes: {
+        exclude: ["createdAt", "updatedAt"],
+      },
+    },
+  });
+  if (!group) {
+    res.status(404);
+    return res.json({
+      message: "Group couldn't be found",
+    });
+  }
+  const organizerId = group.organizerId;
+  const user = await User.findByPk(req.user.id);
+  const membership = await Membership.findOne({
+    where: {
+      groupId: group.id,
+      userId: user.id,
+    },
+  });
+  if (membership) {
+    if (user.id !== organizerId && membership.status !== "Co-host") {
+      res.status(403);
+      return res.json({
+        message: "Forbidden",
+      });
+    } else if (membership === null) {
+      if (user.id !== organizerId) {
+        res.status(403);
+        return res.json({
+          message: "Forbidden",
+        });
+      }
+    } else {
+      const venuesObj = {};
+      venuesObj.Venues = group.Venues;
+      return res.json(venuesObj);
+    }
   }
 });
 
