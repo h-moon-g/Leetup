@@ -1,5 +1,11 @@
 const express = require("express");
-const { Group, GroupImage, User, Venue } = require("../../db/models");
+const {
+  Group,
+  GroupImage,
+  User,
+  Venue,
+  Membership,
+} = require("../../db/models");
 const { requireAuth } = require("../../utils/auth.js");
 
 const { check } = require("express-validator");
@@ -36,12 +42,12 @@ router.get("", async (req, res) => {
       },
     ],
   });
-  const previewImage = await GroupImage.findByPk(1);
   let groupsList = [];
   groups.forEach((group) => {
     groupsList.push(group.toJSON());
   });
   groupsList.forEach((group) => {
+    let hasPreviewImage = false;
     let userCount = 0;
     if (!group.Users.length) {
       group.numMembers = 0;
@@ -57,7 +63,15 @@ router.get("", async (req, res) => {
       group.previewImage = "No preview image.";
       delete group.GroupImages;
     } else {
-      group.previewImage = previewImage.url;
+      group.GroupImages.forEach((image) => {
+        if (image.preview === true) {
+          group.previewImage = image.url;
+          hasPreviewImage = true;
+        }
+      });
+      if (hasPreviewImage === false) {
+        group.previewImage = "No preview image.";
+      }
       delete group.GroupImages;
     }
   });
@@ -78,13 +92,13 @@ router.get("/current", requireAuth, async (req, res) => {
       },
     ],
   });
-  const previewImage = await GroupImage.findByPk(1);
   let groupsList = [];
   let currentGroupsList = [];
   groups.forEach((group) => {
     groupsList.push(group.toJSON());
   });
   groupsList.forEach((group) => {
+    let hasPreviewImage = false;
     let userCount = 0;
     if (!group.Users.length) {
       group.numMembers = 0;
@@ -98,7 +112,15 @@ router.get("/current", requireAuth, async (req, res) => {
       group.previewImage = "No preview image.";
       delete group.GroupImages;
     } else {
-      group.previewImage = previewImage.url;
+      group.GroupImages.forEach((image) => {
+        if (image.preview === true) {
+          group.previewImage = image.url;
+          hasPreviewImage = true;
+        }
+      });
+      if (hasPreviewImage === false) {
+        group.previewImage = "No preview image.";
+      }
       delete group.GroupImages;
     }
     if (group.organizerId === req.user.id) {
@@ -172,9 +194,9 @@ router.get("/:groupId", async (req, res) => {
 //Create a group
 router.post("", requireAuth, validateCreateGroup, async (req, res) => {
   const { name, about, type, private, city, state } = req.body;
-  const organizerId = await User.findByPk(req.user.id);
+  const organizer = await User.findByPk(req.user.id);
   const newGroup = await Group.create({
-    organizerId: organizerId.id,
+    organizerId: organizer.id,
     name,
     about,
     type,
@@ -182,7 +204,53 @@ router.post("", requireAuth, validateCreateGroup, async (req, res) => {
     city,
     state,
   });
+  await Membership.create({
+    userId: organizer.id,
+    groupId: newGroup.id,
+    status: "Host",
+  });
   return res.json(newGroup);
+});
+
+//Add an image to a Group based on the Group's id
+router.post("/:groupId/images", requireAuth, async (req, res) => {
+  const group = await Group.findOne({
+    where: {
+      id: req.params.groupId,
+    },
+    include: {
+      model: GroupImage,
+    },
+  });
+  if (!group) {
+    res.status(404);
+    return res.json({
+      message: "Group couldn't be found",
+    });
+  }
+  const organizerId = group.organizerId;
+  const user = await User.findByPk(req.user.id);
+  if (user.id !== organizerId) {
+    res.status(403);
+    return res.json({
+      message: "Forbidden",
+    });
+  } else {
+    const { url, preview } = req.body;
+    const newGroupImage = await GroupImage.create({
+      groupId: group.id,
+      url,
+      preview,
+    });
+    if (newGroupImage.preview === true) {
+      group.GroupImages.forEach((image) => {
+        if (image.url !== newGroupImage.url) {
+          image.preview = false;
+        }
+      });
+    }
+    return res.json(newGroupImage);
+  }
 });
 
 module.exports = router;
