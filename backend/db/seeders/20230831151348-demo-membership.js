@@ -14,7 +14,22 @@ module.exports = {
         {
           userId: 1,
           groupId: 1,
-          status: "Member",
+          status: "Host",
+        },
+        {
+          userId: 1,
+          groupId: 4,
+          status: "Host",
+        },
+        {
+          userId: 2,
+          groupId: 2,
+          status: "Host",
+        },
+        {
+          userId: 3,
+          groupId: 3,
+          status: "Host",
         },
         {
           userId: 2,
@@ -24,6 +39,31 @@ module.exports = {
         {
           userId: 3,
           groupId: 2,
+          status: "Member",
+        },
+        {
+          userId: 4,
+          groupId: 2,
+          status: "Member",
+        },
+        {
+          userId: 5,
+          groupId: 1,
+          status: "Member",
+        },
+        {
+          userId: 6,
+          groupId: 1,
+          status: "Member",
+        },
+        {
+          userId: 6,
+          groupId: 2,
+          status: "Member",
+        },
+        {
+          userId: 6,
+          groupId: 3,
           status: "Member",
         },
       ],

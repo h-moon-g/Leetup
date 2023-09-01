@@ -36,6 +36,13 @@ module.exports = {
           type: "Online",
           private: false,
         },
+        {
+          organizerId: 1,
+          name: "Kendama Club",
+          about: "Group for people to learn how to do Kendama tricks.",
+          type: "Online",
+          private: false,
+        },
       ],
       { validate: true }
     );
