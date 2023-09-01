@@ -291,4 +291,29 @@ router.put("/:groupId", requireAuth, validateCreateGroup, async (req, res) => {
   }
 });
 
+//Delete a group
+router.delete("/:groupId", requireAuth, async (req, res) => {
+  const group = await Group.findByPk(req.params.groupId);
+  console.log(group);
+  if (!group) {
+    res.status(404);
+    return res.json({
+      message: "Group couldn't be found",
+    });
+  }
+  const organizerId = group.organizerId;
+  const user = await User.findByPk(req.user.id);
+  if (user.id !== organizerId) {
+    res.status(403);
+    return res.json({
+      message: "Forbidden",
+    });
+  } else {
+    await group.destroy();
+    return res.json({
+      message: "Successfully deleted",
+    });
+  }
+});
+
 module.exports = router;
