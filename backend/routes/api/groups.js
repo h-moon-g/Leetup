@@ -243,11 +243,14 @@ router.post("/:groupId/images", requireAuth, async (req, res) => {
       preview,
     });
     if (newGroupImage.preview === true) {
-      group.GroupImages.forEach((image) => {
+      for (let i = 0; i < group.GroupImages.length; i++) {
+        let image = group.GroupImages[i];
         if (image.url !== newGroupImage.url) {
-          image.preview = false;
+          await image.update({
+            preview: false,
+          });
         }
-      });
+      }
     }
     return res.json(newGroupImage);
   }
