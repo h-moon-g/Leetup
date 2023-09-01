@@ -18,7 +18,7 @@ module.exports = {
         },
         {
           groupId: 1,
-          url: "https://www.google.com/imgres?imgurl=https%3A%2F%2Fi0.wp.com%2Fkatzenworld.co.uk%2Fwp-content%2Fuploads%2F2019%2F06%2Ffunny-cat.jpeg%3Ffit%3D1020%252C1020%26ssl%3D1&tbnid=73Y0JwfULMDxRM&vet=12ahUKEwjznOzv4paBAxU2GzQIHbcsA0wQMygMegQIARBq..i&imgrefurl=https%3A%2F%2Fkatzenworld.co.uk%2F2019%2F06%2F30%2Fmews-funny-cat-picture-collection%2F&docid=a2eVfPa3s7i6FM&w=1020&h=1020&q=Funny%20cat%20images&ved=2ahUKEwjznOzv4paBAxU2GzQIHbcsA0wQMygMegQIARBq",
+          url: "https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.pexels.com%2Fsearch%2Fcat%2F&psig=AOvVaw2Qj09MWGsjI04hp4pEw3Uh&ust=1694119438452000&source=images&cd=vfe&opi=89978449&ved=0CA8QjRxqFwoTCLC7mezsloEDFQAAAAAdAAAAABAE",
           preview: false,
         },
         {
