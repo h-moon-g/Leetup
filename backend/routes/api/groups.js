@@ -260,4 +260,35 @@ router.post("/:groupId/images", requireAuth, async (req, res) => {
   }
 });
 
+//Edit a group
+router.put("/:groupId", requireAuth, validateCreateGroup, async (req, res) => {
+  const group = await Group.findByPk(req.params.groupId);
+  if (!group) {
+    res.status(404);
+    return res.json({
+      message: "Group couldn't be found",
+    });
+  }
+  const organizerId = group.organizerId;
+  const user = await User.findByPk(req.user.id);
+  if (user.id !== organizerId) {
+    res.status(403);
+    return res.json({
+      message: "Forbidden",
+    });
+  } else {
+    const { name, about, type, private, city, state } = req.body;
+    await group.update({
+      name,
+      about,
+      type,
+      private,
+      city,
+      state,
+      updatedAt: Date.now(),
+    });
+    return res.json(group);
+  }
+});
+
 module.exports = router;
