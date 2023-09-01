@@ -252,7 +252,11 @@ router.post("/:groupId/images", requireAuth, async (req, res) => {
         }
       }
     }
-    return res.json(newGroupImage);
+    return res.json({
+      id: newGroupImage.id,
+      url: newGroupImage.url,
+      preview: newGroupImage.preview,
+    });
   }
 });
 
