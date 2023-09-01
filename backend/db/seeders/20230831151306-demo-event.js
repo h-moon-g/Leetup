@@ -53,19 +53,6 @@ module.exports = {
 
   async down(queryInterface, Sequelize) {
     options.tableName = "Events";
-    const Op = Sequelize.Op;
-    return queryInterface.bulkDelete(
-      options,
-      {
-        name: {
-          [Op.in]: [
-            "Friday Night Commander",
-            "Sunday Night Modern Tournament",
-            "Let's Skate at the New Park!",
-          ],
-        },
-      },
-      {}
-    );
+    return queryInterface.bulkDelete(options);
   },
 };

@@ -25,7 +25,7 @@ module.exports = {
           city: "Seattle",
           state: "Washington",
           lat: 3.456789,
-          lng: 4.567890,
+          lng: 4.56789,
         },
         {
           groupId: 2,
@@ -42,13 +42,6 @@ module.exports = {
 
   async down(queryInterface, Sequelize) {
     options.tableName = "Venues";
-    const Op = Sequelize.Op;
-    return queryInterface.bulkDelete(
-      options,
-      {
-        address: { [Op.in]: ["1234 Main Street", "5678 Space Needle Ave", "1111 Corn Place"] },
-      },
-      {}
-    );
+    return queryInterface.bulkDelete(options);
   },
 };
