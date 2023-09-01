@@ -1,6 +1,26 @@
 const express = require("express");
 const { Group, GroupImage, User, Venue } = require("../../db/models");
 const { requireAuth } = require("../../utils/auth.js");
+
+const { check } = require("express-validator");
+const { handleValidationErrors } = require("../../utils/validation");
+
+const validateCreateGroup = [
+  check("name")
+    .isLength({ max: 60 })
+    .withMessage("Name must be 60 characters or less"),
+  check("about")
+    .isLength({ min: 50 })
+    .withMessage("About must be 50 characters or more"),
+  check("type")
+    .isIn(["Online", "In person"])
+    .withMessage("Type must be 'Online' or 'In person'"),
+  check("private").isBoolean().withMessage("Private must be a boolean"),
+  check("city").exists({ checkFalsy: true }).withMessage("City is required"),
+  check("state").exists({ checkFalsy: true }).withMessage("State is required"),
+  handleValidationErrors,
+];
+
 const router = express.Router();
 
 //Get all groups
@@ -147,6 +167,22 @@ router.get("/:groupId", async (req, res) => {
     });
   }
   return res.json(groupJSON);
+});
+
+//Create a group
+router.post("", requireAuth, validateCreateGroup, async (req, res) => {
+  const { name, about, type, private, city, state } = req.body;
+  const organizerId = await User.findByPk(req.user.id);
+  const newGroup = await Group.create({
+    organizerId: organizerId.id,
+    name,
+    about,
+    type,
+    private,
+    city,
+    state,
+  });
+  return res.json(newGroup);
 });
 
 module.exports = router;
