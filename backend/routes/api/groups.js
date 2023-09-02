@@ -28,6 +28,17 @@ const validateCreateGroup = [
   handleValidationErrors,
 ];
 
+const validateVenue = [
+  check("address")
+    .exists({ checkFalsy: true })
+    .withMessage("Street address is required"),
+  check("city").exists({ checkFalsy: true }).withMessage("City is required"),
+  check("state").exists({ checkFalsy: true }).withMessage("State is required"),
+  check("lat").isDecimal().withMessage("Latitude is not valid"),
+  check("lng").isDecimal().withMessage("Longitude is not valid"),
+  handleValidationErrors,
+];
+
 const router = express.Router();
 
 //Get all groups
@@ -364,5 +375,71 @@ router.get("/:groupId/venues", async (req, res) => {
     return res.json(venuesObj);
   }
 });
+
+//Add a venue to a Group based on the Group's id
+router.post(
+  "/:groupId/venues",
+  requireAuth,
+  validateVenue,
+  async (req, res) => {
+    const group = await Group.findOne({
+      where: {
+        id: req.params.groupId,
+      },
+      include: {
+        model: Venue,
+      },
+    });
+    if (!group) {
+      res.status(404);
+      return res.json({
+        message: "Group couldn't be found",
+      });
+    }
+    const organizerId = group.organizerId;
+    const user = await User.findByPk(req.user.id);
+    const membership = await Membership.findOne({
+      where: {
+        groupId: group.id,
+        userId: user.id,
+      },
+    });
+    if (membership) {
+      if (user.id !== organizerId && membership.status !== "Co-host") {
+        res.status(403);
+        return res.json({
+          message: "Forbidden",
+        });
+      }
+    }
+    if (!membership) {
+      if (user.id !== organizerId) {
+        res.status(403);
+        return res.json({
+          message: "Forbidden",
+        });
+      }
+    } else {
+      const { address, city, state, lat, lng } = req.body;
+      const newVenue = await Venue.create({
+        groupId: group.id,
+        address,
+        city,
+        state,
+        lat,
+        lng,
+      });
+      return res.json({
+        id: newVenue.id,
+        groupId: newVenue.groupId,
+        address: newVenue.address,
+        city: newVenue.city,
+        state: newVenue.state,
+        lat: newVenue.lat,
+        lng: newVenue.lng,
+      });
+    }
+  }
+);
 
 module.exports = router;
