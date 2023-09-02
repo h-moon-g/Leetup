@@ -35,8 +35,8 @@ router.get("", async (req, res) => {
       event.numAttending = 0;
       delete event.Users;
     } else {
-      event.Users.forEach(() => {
-        userCount++;
+      event.Users.forEach((user) => {
+        if (user.Attendance.status === "Attending") userCount++;
         event.numAttending = userCount;
         delete event.Users;
       });
@@ -73,6 +73,56 @@ router.get("", async (req, res) => {
   }
   eventObject.Events = eventsList;
   return res.json(eventObject);
+});
+
+//Get details of an Event from an id
+router.get("/:eventId", async (req, res) => {
+  const event = await Event.findOne({
+    where: {
+      id: req.params.eventId,
+    },
+    attributes: {
+      exclude: ["createdAt", "updatedAt"],
+    },
+    include: [
+      {
+        model: EventImage,
+        attributes: ["id", "url", "preview"],
+      },
+      {
+        model: User,
+      },
+    ],
+  });
+  if (!event) {
+    res.status(404);
+    return res.json({
+      message: "Event couldn't be found",
+    });
+  }
+  let eventJSON = event.toJSON();
+  let userCount = 0;
+  if (!eventJSON.Users.length) {
+    eventJSON.numAttending = 0;
+    delete eventJSON.Users;
+  } else {
+    eventJSON.Users.forEach((user) => {
+      if (user.Attendance.status === "Attending") userCount++;
+      eventJSON.numAttending = userCount;
+      delete eventJSON.Users;
+    });
+  }
+  const group = await Group.findByPk(eventJSON.groupId, {
+    attributes: ["id", "name", "private", "city", "state"],
+  });
+  eventJSON.Group = group;
+  const venue = await Venue.findByPk(eventJSON.venueId, {
+    attributes: {
+      exclude: ["groupId", "createdAt", "updatedAt"],
+    },
+  });
+  eventJSON.Venue = venue;
+  return res.json(eventJSON);
 });
 
 module.exports = router;

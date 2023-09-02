@@ -486,8 +486,8 @@ router.get("/:groupId/events", async (req, res) => {
       event.numAttending = 0;
       delete event.Users;
     } else {
-      event.Users.forEach(() => {
-        userCount++;
+      event.Users.forEach((user) => {
+        if (user.Attendance.status === "Attending") userCount++;
         event.numAttending = userCount;
         delete event.Users;
       });
