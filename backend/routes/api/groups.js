@@ -349,18 +349,19 @@ router.get("/:groupId/venues", async (req, res) => {
       return res.json({
         message: "Forbidden",
       });
-    } else if (membership === null) {
-      if (user.id !== organizerId) {
-        res.status(403);
-        return res.json({
-          message: "Forbidden",
-        });
-      }
-    } else {
-      const venuesObj = {};
-      venuesObj.Venues = group.Venues;
-      return res.json(venuesObj);
     }
+  }
+  if (!membership) {
+    if (user.id !== organizerId) {
+      res.status(403);
+      return res.json({
+        message: "Forbidden",
+      });
+    }
+  } else {
+    const venuesObj = {};
+    venuesObj.Venues = group.Venues;
+    return res.json(venuesObj);
   }
 });
 
