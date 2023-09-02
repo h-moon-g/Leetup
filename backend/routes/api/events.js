@@ -70,6 +70,7 @@ router.get("", async (req, res) => {
       attributes: ["id", "city", "state"],
     });
     event.Venue = venue;
+    event.startDate = event.startDate.split;
   }
   eventObject.Events = eventsList;
   return res.json(eventObject);

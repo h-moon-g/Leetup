@@ -40,6 +40,36 @@ const validateVenue = [
   handleValidationErrors,
 ];
 
+const validateEvent = [
+  check("venueId").custom(async (venueId) => {
+    const existingVenue = await Venue.findByPk(venueId);
+    if (!existingVenue) {
+      throw new Error("Venue does not exist");
+    }
+  }),
+  check("name")
+    .isLength({ min: 5 })
+    .withMessage("Name must be at least 5 characters"),
+  check("type")
+    .isIn(["Online", "In person"])
+    .withMessage("Type must be 'Online' or 'In person'"),
+  check("capacity").isInt().withMessage("Capacity must be an integer"),
+  check("price").isInt().withMessage("Price is invalid"),
+  check("description")
+    .exists({ checkFalsy: true })
+    .withMessage("Description is required"),
+  check("startDate")
+    .isAfter(Date(Date.now()))
+    .withMessage("Start date must be in the future"),
+  check("endDate").custom(async (endDate, { req }) => {
+    let startDate = req.body.startDate;
+    if (endDate < startDate) {
+      throw new Error("End date is less than start date");
+    }
+  }),
+  handleValidationErrors,
+];
+
 const router = express.Router();
 
 //Get all groups
@@ -519,5 +549,83 @@ router.get("/:groupId/events", async (req, res) => {
   eventObject.Events = eventsList;
   return res.json(eventObject);
 });
+
+// //Add an event to a Group based on the Group's id
+router.post(
+  "/:groupId/events",
+  requireAuth,
+  validateEvent,
+  async (req, res) => {
+    const group = await Group.findOne({
+      where: {
+        id: req.params.groupId,
+      },
+    });
+    if (!group) {
+      res.status(404);
+      return res.json({
+        message: "Group couldn't be found",
+      });
+    }
+    const organizerId = group.organizerId;
+    const user = await User.findByPk(req.user.id);
+    const membership = await Membership.findOne({
+      where: {
+        groupId: group.id,
+        userId: user.id,
+      },
+    });
+    if (membership) {
+      if (user.id !== organizerId && membership.status !== "Co-host") {
+        res.status(403);
+        return res.json({
+          message: "Forbidden",
+        });
+      }
+    }
+    if (!membership) {
+      if (user.id !== organizerId) {
+        res.status(403);
+        return res.json({
+          message: "Forbidden",
+        });
+      }
+    } else {
+      const {
+        venueId,
+        name,
+        type,
+        capacity,
+        price,
+        description,
+        startDate,
+        endDate,
+      } = req.body;
+      const newEvent = await Event.create({
+        groupId: group.id,
+        venueId,
+        name,
+        type,
+        capacity,
+        price,
+        description,
+        startDate,
+        endDate,
+      });
+      return res.json({
+        id: newEvent.id,
+        groupId: newEvent.groupId,
+        venueId: newEvent.venueId,
+        name: newEvent.name,
+        type: newEvent.type,
+        capacity: newEvent.capacity,
+        price: newEvent.price,
+        description: newEvent.description,
+        startDate: newEvent.startDate,
+        endDate: newEvent.endDate,
+      });
+    }
+  }
+);
 
 module.exports = router;
