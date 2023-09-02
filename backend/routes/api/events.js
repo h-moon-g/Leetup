@@ -242,7 +242,6 @@ router.post("/:eventId/images", requireAuth, async (req, res) => {
 //Edit an event
 router.put("/:eventId", requireAuth, validateEvent, async (req, res) => {
   const event = await Event.findByPk(req.params.eventId);
-  console.log(event);
   if (!event) {
     res.status(404);
     return res.json({
@@ -315,6 +314,48 @@ router.put("/:eventId", requireAuth, validateEvent, async (req, res) => {
       description: event.description,
       startDate: event.startDate,
       endDate: event.endDate,
+    });
+  }
+});
+
+//Delete an event
+router.delete("/:eventId", requireAuth, async (req, res) => {
+  const event = await Event.findByPk(req.params.eventId);
+  if (!event) {
+    res.status(404);
+    return res.json({
+      message: "Event couldn't be found",
+    });
+  }
+  const group = await Group.findByPk(event.groupId);
+  const organizerId = group.organizerId;
+  const user = await User.findByPk(req.user.id);
+  const membership = await Membership.findOne({
+    where: {
+      groupId: group.id,
+      userId: user.id,
+    },
+  });
+  console.log(membership);
+  if (membership) {
+    if (user.id !== organizerId && membership.status !== "Co-host") {
+      res.status(403);
+      return res.json({
+        message: "Forbidden",
+      });
+    }
+  }
+  if (!membership) {
+    if (user.id !== organizerId) {
+      res.status(403);
+      return res.json({
+        message: "Forbidden",
+      });
+    }
+  } else {
+    await event.destroy();
+    return res.json({
+      message: "Successfully deleted",
     });
   }
 });
