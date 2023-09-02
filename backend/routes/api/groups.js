@@ -5,6 +5,8 @@ const {
   User,
   Venue,
   Membership,
+  Event,
+  EventImage,
 } = require("../../db/models");
 const { requireAuth } = require("../../utils/auth.js");
 
@@ -327,7 +329,7 @@ router.delete("/:groupId", requireAuth, async (req, res) => {
 });
 
 //Get all Venues for a Group specified by its id
-router.get("/:groupId/venues", async (req, res) => {
+router.get("/:groupId/venues", requireAuth, async (req, res) => {
   const group = await Group.findOne({
     where: {
       id: req.params.groupId,
@@ -440,5 +442,82 @@ router.post(
     }
   }
 );
+
+//Get all Events of a Group specified by its id
+router.get("/:groupId/events", async (req, res) => {
+  const group = await Group.findOne({
+    where: {
+      id: req.params.groupId,
+    },
+    attributes: ["id", "name", "city", "state"],
+  });
+  if (!group) {
+    res.status(404);
+    return res.json({
+      message: "Group couldn't be found",
+    });
+  }
+  const eventObject = {};
+  const events = await Event.findAll({
+    where: {
+      groupId: group.id,
+    },
+    attributes: {
+      exclude: ["description", "capacity", "price", "createdAt", "updatedAt"],
+    },
+    include: [
+      {
+        model: EventImage,
+      },
+      {
+        model: User,
+      },
+    ],
+  });
+  let eventsList = [];
+  events.forEach((event) => {
+    eventsList.push(event.toJSON());
+  });
+  for (let i = 0; i < eventsList.length; i++) {
+    let event = eventsList[i];
+    let hasPreviewImage = false;
+    let userCount = 0;
+    if (!event.Users.length) {
+      event.numAttending = 0;
+      delete event.Users;
+    } else {
+      event.Users.forEach(() => {
+        userCount++;
+        event.numAttending = userCount;
+        delete event.Users;
+      });
+    }
+    if (!event.EventImages.length) {
+      event.previewImage = "No preview image.";
+      delete event.EventImages;
+    } else {
+      event.EventImages.forEach((image) => {
+        if (image.preview === true) {
+          event.previewImage = image.url;
+          hasPreviewImage = true;
+        }
+      });
+      if (hasPreviewImage === false) {
+        event.previewImage = "No preview image.";
+      }
+      delete event.EventImages;
+    }
+    event.Group = group;
+    const venue = await Venue.findOne({
+      where: {
+        id: event.venueId,
+      },
+      attributes: ["id", "city", "state"],
+    });
+    event.Venue = venue;
+  }
+  eventObject.Events = eventsList;
+  return res.json(eventObject);
+});
 
 module.exports = router;

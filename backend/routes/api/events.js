@@ -56,7 +56,6 @@ router.get("", async (req, res) => {
       }
       delete event.EventImages;
     }
-    console.log(event.startDate.toString());
     const group = await Group.findOne({
       where: {
         id: event.groupId,
