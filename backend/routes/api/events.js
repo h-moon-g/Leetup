@@ -1,5 +1,13 @@
 const express = require("express");
-const { Event, EventImage, User, Group, Venue } = require("../../db/models");
+const {
+  Event,
+  EventImage,
+  User,
+  Group,
+  Venue,
+  Attendance,
+  Membership,
+} = require("../../db/models");
 
 const { requireAuth } = require("../../utils/auth.js");
 const { check } = require("express-validator");
@@ -124,6 +132,81 @@ router.get("/:eventId", async (req, res) => {
   });
   eventJSON.Venue = venue;
   return res.json(eventJSON);
+});
+
+//Add an image to a Group based on the Group's id
+router.post("/:eventId/images", requireAuth, async (req, res) => {
+  const event = await Event.findOne({
+    where: {
+      id: req.params.eventId,
+    },
+    include: {
+      model: EventImage,
+    },
+  });
+  if (!event) {
+    res.status(404);
+    return res.json({
+      message: "Event couldn't be found",
+    });
+  }
+  const user = await User.findByPk(req.user.id);
+  const attendance = await Attendance.findOne({
+    where: {
+      eventId: event.id,
+      userId: user.id,
+    },
+  });
+  const membership = await Membership.findOne({
+    where: {
+      userId: user.id,
+      groupId: event.groupId,
+    },
+  });
+  let validUser = false;
+  if (attendance || membership) {
+    if (attendance) {
+      console.log(attendance.status);
+      if (attendance.status === "Attending") {
+        validUser = true;
+      }
+    }
+    if (membership) {
+      console.log(membership.status);
+      if (membership.status === "Host" || membership.status === "Co-host") {
+        validUser = true;
+      }
+    }
+  }
+  if (validUser === false) {
+    res.status(403);
+    return res.json({
+      message: "Forbidden",
+    });
+  } else {
+    const { url, preview } = req.body;
+    const newEventImage = await EventImage.create({
+      eventId: event.id,
+      url,
+      preview,
+    });
+    if (newEventImage.preview === true) {
+      console.log(event.EventImages);
+      for (let i = 0; i < event.EventImages.length; i++) {
+        let image = event.EventImages[i];
+        if (image.id !== newEventImage.id) {
+          await image.update({
+            preview: false,
+          });
+        }
+      }
+    }
+    return res.json({
+      id: newEventImage.id,
+      url: newEventImage.url,
+      preview: newEventImage.preview,
+    });
+  }
 });
 
 module.exports = router;

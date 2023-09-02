@@ -7,6 +7,7 @@ const {
   Membership,
   Event,
   EventImage,
+  Attendance,
 } = require("../../db/models");
 const { requireAuth } = require("../../utils/auth.js");
 
@@ -288,7 +289,7 @@ router.post("/:groupId/images", requireAuth, async (req, res) => {
     if (newGroupImage.preview === true) {
       for (let i = 0; i < group.GroupImages.length; i++) {
         let image = group.GroupImages[i];
-        if (image.url !== newGroupImage.url) {
+        if (image.id !== newGroupImage.id) {
           await image.update({
             preview: false,
           });
@@ -550,7 +551,7 @@ router.get("/:groupId/events", async (req, res) => {
   return res.json(eventObject);
 });
 
-// //Add an event to a Group based on the Group's id
+//Add an event to a Group based on the Group's id
 router.post(
   "/:groupId/events",
   requireAuth,
