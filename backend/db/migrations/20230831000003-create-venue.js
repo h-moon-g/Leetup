@@ -8,6 +8,7 @@ if (process.env.NODE_ENV === "production") {
 
 module.exports = {
   async up(queryInterface, Sequelize) {
+    console.log(Sequelize.literal("CURRENT_TIMESTAMP"));
     await queryInterface.createTable(
       "Venues",
       {
