@@ -10,7 +10,6 @@ const { requireAuth } = require("../../utils/auth.js");
 
 const { check } = require("express-validator");
 const { handleValidationErrors } = require("../../utils/validation");
-const e = require("express");
 
 const validateCreateGroup = [
   check("name")
