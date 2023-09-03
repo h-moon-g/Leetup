@@ -67,8 +67,8 @@ router.put("/:venueId", requireAuth, validateVenue, async (req, res) => {
       address: venue.address,
       city: venue.city,
       state: venue.state,
-      lat: venue.lat,
-      lng: venue.lng,
+      lat: parseInt(venue.lat),
+      lng: parseInt(venue.lng),
     });
   }
 });

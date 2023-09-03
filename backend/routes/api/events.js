@@ -249,6 +249,8 @@ router.get("/:eventId", async (req, res) => {
   eventJSON.price = parseFloat(eventJSON.price).toFixed(2);
   eventJSON.startDate = formattedDate(eventJSON.startDate);
   eventJSON.endDate = formattedDate(eventJSON.endDate);
+  eventJSON.lat = parseInt(eventJSON.lat);
+  eventJSON.lng = parseInt(eventJSON.lng);
   return res.json(eventJSON);
 });
 
