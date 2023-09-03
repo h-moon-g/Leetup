@@ -28,7 +28,6 @@ router.put("/:venueId", requireAuth, validateVenue, async (req, res) => {
     });
   }
   const group = await Group.findByPk(venue.groupId);
-  console.log(group);
   const organizerId = group.organizerId;
   const user = await User.findByPk(req.user.id);
   const membership = await Membership.findOne({
@@ -38,7 +37,7 @@ router.put("/:venueId", requireAuth, validateVenue, async (req, res) => {
     },
   });
   if (membership) {
-    if (user.id !== organizerId && membership.status !== "Co-host") {
+    if (user.id !== organizerId && membership.status !== "co-host") {
       res.status(403);
       return res.json({
         message: "Forbidden",

@@ -14,57 +14,57 @@ module.exports = {
         {
           userId: 1,
           groupId: 1,
-          status: "Host",
+          status: "host",
         },
         {
           userId: 1,
           groupId: 4,
-          status: "Host",
+          status: "host",
         },
         {
           userId: 2,
           groupId: 2,
-          status: "Host",
+          status: "host",
         },
         {
           userId: 3,
           groupId: 3,
-          status: "Host",
+          status: "host",
         },
         {
           userId: 2,
           groupId: 1,
-          status: "Pending",
+          status: "pending",
         },
         {
           userId: 3,
           groupId: 2,
-          status: "Member",
+          status: "member",
         },
         {
           userId: 4,
           groupId: 2,
-          status: "Member",
+          status: "member",
         },
         {
           userId: 5,
           groupId: 1,
-          status: "Co-host",
+          status: "co-host",
         },
         {
           userId: 6,
           groupId: 1,
-          status: "Member",
+          status: "member",
         },
         {
           userId: 6,
           groupId: 2,
-          status: "Member",
+          status: "member",
         },
         {
           userId: 6,
           groupId: 3,
-          status: "Member",
+          status: "member",
         },
       ],
       { validate: true }

@@ -43,12 +43,96 @@ const validateEvent = [
   handleValidationErrors,
 ];
 
+const formattedDate = (date) => {
+  d = new Date(date);
+  cd = (num) => num.toString().padStart(2, 0);
+  return (
+    d.getFullYear() +
+    "-" +
+    cd(d.getMonth() + 1) +
+    "-" +
+    cd(d.getDate()) +
+    " " +
+    cd(d.getHours()) +
+    ":" +
+    cd(d.getMinutes()) +
+    ":" +
+    cd(d.getSeconds())
+  );
+};
+
 const router = express.Router();
 
 //Get all events
 router.get("", async (req, res) => {
+  //query filters
+  let { name, type, startDate, page, size } = req.query;
+  const where = {};
+  const errors = {};
+  if (page) {
+    if (isNaN(page) || page <= 0) {
+      errors.page = "Page must be greater than or equal to 1";
+    }
+  }
+  if (size) {
+    if (isNaN(size) || size <= 0) {
+      errors.size = "Size must be greater than or equal to 1";
+    }
+  }
+  if (name) {
+    if (!Number(name)) {
+      where.name = name;
+    } else {
+      errors.name = "Name must be a string";
+    }
+  }
+  if (type) {
+    if (type === "In person" || type === "Online") {
+      where.type = type;
+    } else {
+      errors.type = "Type must be 'Online' or 'In Person'";
+    }
+  }
+  if (startDate) {
+    let date = new Date(startDate);
+    if (!isNaN(date)) {
+      where.startDate = startDate;
+    } else {
+      errors.startDate = "Start date must be a valid datetime";
+    }
+  }
+  if (
+    errors.page ||
+    errors.size ||
+    errors.name ||
+    errors.type ||
+    errors.startDate
+  ) {
+    res.status(400);
+    return res.json({
+      message: "Bad Request",
+      errors,
+    });
+  }
+  if (!page || (isNaN(page) && page <= 0)) {
+    page = 1;
+  } else if (page > 10) {
+    page = 10;
+  }
+  if (!size || (isNaN(size) && size <= 0)) {
+    size = 20;
+  } else if (size > 20) {
+    size = 20;
+  }
+  let pagination = {
+    limit: size <= 20 ? size : 20,
+    offset: (page - 1) * size,
+  };
+  //get all
   const eventObject = {};
   const events = await Event.findAll({
+    where,
+    ...pagination,
     attributes: {
       exclude: ["description", "capacity", "price", "createdAt", "updatedAt"],
     },
@@ -74,7 +158,7 @@ router.get("", async (req, res) => {
       delete event.Users;
     } else {
       event.Users.forEach((user) => {
-        if (user.Attendance.status === "Attending") userCount++;
+        if (user.Attendance.status === "attending") userCount++;
         event.numAttending = userCount;
         delete event.Users;
       });
@@ -108,7 +192,8 @@ router.get("", async (req, res) => {
       attributes: ["id", "city", "state"],
     });
     event.Venue = venue;
-    event.startDate = event.startDate.split;
+    event.startDate = formattedDate(event.startDate);
+    event.endDate = formattedDate(event.endDate);
   }
   eventObject.Events = eventsList;
   return res.json(eventObject);
@@ -146,7 +231,7 @@ router.get("/:eventId", async (req, res) => {
     delete eventJSON.Users;
   } else {
     eventJSON.Users.forEach((user) => {
-      if (user.Attendance.status === "Attending") userCount++;
+      if (user.Attendance.status === "attending") userCount++;
       eventJSON.numAttending = userCount;
       delete eventJSON.Users;
     });
@@ -161,6 +246,8 @@ router.get("/:eventId", async (req, res) => {
     },
   });
   eventJSON.Venue = venue;
+  eventJSON.startDate = formattedDate(eventJSON.startDate);
+  eventJSON.endDate = formattedDate(eventJSON.endDate);
   return res.json(eventJSON);
 });
 
@@ -196,14 +283,12 @@ router.post("/:eventId/images", requireAuth, async (req, res) => {
   let validUser = false;
   if (attendance || membership) {
     if (attendance) {
-      console.log(attendance.status);
-      if (attendance.status === "Attending") {
+      if (attendance.status === "attending") {
         validUser = true;
       }
     }
     if (membership) {
-      console.log(membership.status);
-      if (membership.status === "Host" || membership.status === "Co-host") {
+      if (membership.status === "host" || membership.status === "co-host") {
         validUser = true;
       }
     }
@@ -221,7 +306,6 @@ router.post("/:eventId/images", requireAuth, async (req, res) => {
       preview,
     });
     if (newEventImage.preview === true) {
-      console.log(event.EventImages);
       for (let i = 0; i < event.EventImages.length; i++) {
         let image = event.EventImages[i];
         if (image.id !== newEventImage.id) {
@@ -257,9 +341,8 @@ router.put("/:eventId", requireAuth, validateEvent, async (req, res) => {
       userId: user.id,
     },
   });
-  console.log(membership);
   if (membership) {
-    if (user.id !== organizerId && membership.status !== "Co-host") {
+    if (user.id !== organizerId && membership.status !== "co-host") {
       res.status(403);
       return res.json({
         message: "Forbidden",
@@ -312,8 +395,8 @@ router.put("/:eventId", requireAuth, validateEvent, async (req, res) => {
       capacity: event.capacity,
       price: event.price,
       description: event.description,
-      startDate: event.startDate,
-      endDate: event.endDate,
+      startDate: formattedDate(event.startDate),
+      endDate: formattedDate(event.endDate),
     });
   }
 });
@@ -336,9 +419,8 @@ router.delete("/:eventId", requireAuth, async (req, res) => {
       userId: user.id,
     },
   });
-  console.log(membership);
   if (membership) {
-    if (user.id !== organizerId && membership.status !== "Co-host") {
+    if (user.id !== organizerId && membership.status !== "co-host") {
       res.status(403);
       return res.json({
         message: "Forbidden",
@@ -380,7 +462,7 @@ router.get("/:eventId/attendees", async (req, res) => {
       userId: user.id,
     },
   });
-  if (user.id === organizerId || membership.status === "Co-host") {
+  if (user.id === organizerId || membership.status === "co-host") {
     const attendances = await Attendance.findAll({
       where: {
         eventId: event.id,
@@ -416,7 +498,7 @@ router.get("/:eventId/attendees", async (req, res) => {
       });
       userJSON = user.toJSON();
       userJSON.Attendance = { status: attendee.status };
-      if (attendee.status !== "Pending") {
+      if (attendee.status !== "pending") {
         attendeesList.push(userJSON);
       }
     }
@@ -455,7 +537,7 @@ router.post("/:eventId/attendance", requireAuth, async (req, res) => {
       where: { userId: user.id, eventId: event.id },
     });
     if (attendance) {
-      if (attendance.status !== "Pending") {
+      if (attendance.status !== "pending") {
         res.status(400);
         return res.json({
           message: "User is already an attendee of the event",
@@ -468,7 +550,7 @@ router.post("/:eventId/attendance", requireAuth, async (req, res) => {
     const newAttendance = await Attendance.create({
       userId: user.id,
       eventId: event.id,
-      status: "Pending",
+      status: "pending",
     });
     return res.json({
       userId: newAttendance.userId,
@@ -495,14 +577,14 @@ router.put("/:eventId/attendance", requireAuth, async (req, res) => {
       userId: user.id,
     },
   });
-  if (user.id !== organizerId && membership.status !== "Co-host") {
+  if (user.id !== organizerId && membership.status !== "co-host") {
     res.status(403);
     return res.json({
       message: "Forbidden",
     });
   } else {
     const { userId, status } = req.body;
-    if (status === "Pending") {
+    if (status === "pending") {
       res.status(400);
       return res.json({
         message: "Validation Error",

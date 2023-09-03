@@ -72,6 +72,24 @@ const validateEvent = [
   handleValidationErrors,
 ];
 
+const formattedDate = (date) => {
+  d = new Date(date);
+  cd = (num) => num.toString().padStart(2, 0);
+  return (
+    d.getFullYear() +
+    "-" +
+    cd(d.getMonth() + 1) +
+    "-" +
+    cd(d.getDate()) +
+    " " +
+    cd(d.getHours()) +
+    ":" +
+    cd(d.getMinutes()) +
+    ":" +
+    cd(d.getSeconds())
+  );
+};
+
 const router = express.Router();
 
 //Get all groups
@@ -175,7 +193,7 @@ router.get("/current", requireAuth, async (req, res) => {
       group.Users.forEach((user) => {
         if (
           user.Membership.userId === req.user.id &&
-          user.Membership.status !== "Host"
+          user.Membership.status !== "host"
         ) {
           currentGroupsList.push(group);
         }
@@ -252,7 +270,7 @@ router.post("", requireAuth, validateCreateGroup, async (req, res) => {
   await Membership.create({
     userId: organizer.id,
     groupId: newGroup.id,
-    status: "Host",
+    status: "host",
   });
   return res.json(newGroup);
 });
@@ -388,7 +406,7 @@ router.get("/:groupId/venues", requireAuth, async (req, res) => {
     },
   });
   if (membership) {
-    if (user.id !== organizerId && membership.status !== "Co-host") {
+    if (user.id !== organizerId && membership.status !== "co-host") {
       res.status(403);
       return res.json({
         message: "Forbidden",
@@ -438,7 +456,7 @@ router.post(
       },
     });
     if (membership) {
-      if (user.id !== organizerId && membership.status !== "Co-host") {
+      if (user.id !== organizerId && membership.status !== "co-host") {
         res.status(403);
         return res.json({
           message: "Forbidden",
@@ -519,7 +537,7 @@ router.get("/:groupId/events", async (req, res) => {
       delete event.Users;
     } else {
       event.Users.forEach((user) => {
-        if (user.Attendance.status === "Attending") userCount++;
+        if (user.Attendance.status === "attending") userCount++;
         event.numAttending = userCount;
         delete event.Users;
       });
@@ -547,6 +565,8 @@ router.get("/:groupId/events", async (req, res) => {
       attributes: ["id", "city", "state"],
     });
     event.Venue = venue;
+    event.startDate = formattedDate(event.startDate);
+    event.endDate = formattedDate(event.endDate);
   }
   eventObject.Events = eventsList;
   return res.json(eventObject);
@@ -578,7 +598,7 @@ router.post(
       },
     });
     if (membership) {
-      if (user.id !== organizerId && membership.status !== "Co-host") {
+      if (user.id !== organizerId && membership.status !== "co-host") {
         res.status(403);
         return res.json({
           message: "Forbidden",
@@ -623,8 +643,8 @@ router.post(
         capacity: newEvent.capacity,
         price: newEvent.price,
         description: newEvent.description,
-        startDate: newEvent.startDate,
-        endDate: newEvent.endDate,
+        startDate: formattedDate(newEvent.startDate),
+        endDate: formattedDate(newEvent.endDate),
       });
     }
   }
@@ -649,7 +669,7 @@ router.get("/:groupId/members", async (req, res) => {
       userId: user.id,
     },
   });
-  if (user.id === organizerId || membership.status === "Co-host") {
+  if (user.id === organizerId || membership.status === "co-host") {
     const memberships = await Membership.findAll({
       where: {
         groupId: group.id,
@@ -685,7 +705,7 @@ router.get("/:groupId/members", async (req, res) => {
       });
       userJSON = user.toJSON();
       userJSON.Membership = { status: member.status };
-      if (member.status !== "Pending") {
+      if (member.status !== "pending") {
         membersList.push(userJSON);
       }
     }
@@ -712,7 +732,7 @@ router.post("/:groupId/membership", requireAuth, async (req, res) => {
     where: { userId: user.id, groupId: group.id },
   });
   if (membership) {
-    if (membership.status !== "Pending") {
+    if (membership.status !== "pending") {
       res.status(400);
       return res.json({ message: "User is already a member of the group" });
     } else {
@@ -723,7 +743,7 @@ router.post("/:groupId/membership", requireAuth, async (req, res) => {
   const newMembership = await Membership.create({
     userId: user.id,
     groupId: group.id,
-    status: "Pending",
+    status: "pending",
   });
   return res.json({
     memberId: newMembership.memberId,
@@ -751,7 +771,7 @@ router.put("/:groupId/membership", requireAuth, async (req, res) => {
   if (membership) {
     if (user.id === organizerId) {
       const { memberId, status } = req.body;
-      if (status === "Pending") {
+      if (status === "pending") {
         res.status(400);
         return res.json({
           message: "Validation Error",
@@ -791,15 +811,15 @@ router.put("/:groupId/membership", requireAuth, async (req, res) => {
         memberId: updatingMem.userId,
         status: updatingMem.status,
       });
-    } else if (membership.status === "Co-host") {
+    } else if (membership.status === "co-host") {
       const { memberId, status } = req.body;
-      if (status === "Co-host") {
+      if (status === "co-host") {
         res.status(403);
         return res.json({
           message: "Forbidden",
         });
       }
-      if (status === "Pending") {
+      if (status === "pending") {
         res.status(400);
         return res.json({
           message: "Validation Error",
@@ -855,7 +875,7 @@ router.put("/:groupId/membership", requireAuth, async (req, res) => {
     }
   } else {
     const { memberId, status } = req.body;
-    if (status === "Pending") {
+    if (status === "pending") {
       res.status(400);
       return res.json({
         message: "Validation Error",
