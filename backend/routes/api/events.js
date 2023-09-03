@@ -27,7 +27,7 @@ const validateEvent = [
     .isIn(["Online", "In person"])
     .withMessage("Type must be 'Online' or 'In person'"),
   check("capacity").isInt().withMessage("Capacity must be an integer"),
-  check("price").isInt().withMessage("Price is invalid"),
+  check("price").isDecimal().withMessage("Price is invalid"),
   check("description")
     .exists({ checkFalsy: true })
     .withMessage("Description is required"),
