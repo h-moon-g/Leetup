@@ -629,4 +629,91 @@ router.post(
   }
 );
 
+router.get("/:groupId/members", async (req, res) => {
+  const group = await Group.findByPk(req.params.groupId);
+  if (!group) {
+    res.status(404);
+    return res.json({
+      message: "Group couldn't be found",
+    });
+  }
+  const membersObject = {};
+  let membersList = [];
+  const organizerId = group.organizerId;
+  const user = await User.findByPk(req.user.id);
+  const membership = await Membership.findOne({
+    where: {
+      groupId: group.id,
+      userId: user.id,
+    },
+  });
+  if (membership) {
+    if (user.id === organizerId || membership.status === "Co-host") {
+      const memberships = await Membership.findAll({
+        where: {
+          groupId: group.id,
+        },
+      });
+      for (let i = 0; i < memberships.length; i++) {
+        let member = memberships[i];
+        const user = await User.findOne({
+          where: {
+            id: member.userId,
+          },
+          attributes: ["id", "firstName", "lastName"],
+        });
+        userJSON = user.toJSON();
+        userJSON.Membership = { status: member.status };
+        membersList.push(userJSON);
+      }
+      membersObject.Members = membersList;
+      return res.json(membersObject);
+    } else {
+      const memberships = await Membership.findAll({
+        where: {
+          groupId: group.id,
+        },
+      });
+      for (let i = 0; i < memberships.length; i++) {
+        let member = memberships[i];
+        const user = await User.findOne({
+          where: {
+            id: member.userId,
+          },
+          attributes: ["id", "firstName", "lastName"],
+        });
+        userJSON = user.toJSON();
+        userJSON.Membership = { status: member.status };
+        if (member.status !== "Pending") {
+          membersList.push(userJSON);
+        }
+      }
+      membersObject.Members = membersList;
+      return res.json(membersObject);
+    }
+  } else {
+    const memberships = await Membership.findAll({
+      where: {
+        groupId: group.id,
+      },
+    });
+    for (let i = 0; i < memberships.length; i++) {
+      let member = memberships[i];
+      const user = await User.findOne({
+        where: {
+          id: member.userId,
+        },
+        attributes: ["id", "firstName", "lastName"],
+      });
+      userJSON = user.toJSON();
+      userJSON.Membership = { status: member.status };
+      if (member.status !== "Pending") {
+        membersList.push(userJSON);
+      }
+    }
+    membersObject.Members = membersList;
+    return res.json(membersObject);
+  }
+});
+
 module.exports = router;
