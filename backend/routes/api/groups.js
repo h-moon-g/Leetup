@@ -641,7 +641,7 @@ router.post(
         name: newEvent.name,
         type: newEvent.type,
         capacity: newEvent.capacity,
-        price: newEvent.price,
+        price: newEvent.price.toFixed(2),
         description: newEvent.description,
         startDate: formattedDate(newEvent.startDate),
         endDate: formattedDate(newEvent.endDate),
