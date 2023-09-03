@@ -425,4 +425,56 @@ router.get("/:eventId/attendees", async (req, res) => {
   }
 });
 
+//Request to attend an event
+router.post("/:eventId/attendance", requireAuth, async (req, res) => {
+  const event = await Event.findOne({
+    where: {
+      id: req.params.eventId,
+    },
+  });
+  if (!event) {
+    res.status(404);
+    return res.json({
+      message: "Event couldn't be found",
+    });
+  }
+  const user = await User.findByPk(req.user.id);
+  const membership = await Membership.findOne({
+    where: {
+      userId: user.id,
+      groupId: event.groupId,
+    },
+  });
+  if (!membership) {
+    res.status(403);
+    return res.json({
+      message: "Forbidden",
+    });
+  } else {
+    const attendance = await Attendance.findOne({
+      where: { userId: user.id, eventId: event.id },
+    });
+    if (attendance) {
+      if (attendance.status !== "Pending") {
+        res.status(400);
+        return res.json({
+          message: "User is already an attendee of the event",
+        });
+      } else {
+        res.status(400);
+        return res.json({ message: "Attendance has already been requested" });
+      }
+    }
+    const newAttendance = await Attendance.create({
+      userId: user.id,
+      eventId: event.id,
+      status: "Pending",
+    });
+    return res.json({
+      userId: newAttendance.userId,
+      status: newAttendance.status,
+    });
+  }
+});
+
 module.exports = router;
