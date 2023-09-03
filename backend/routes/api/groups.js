@@ -486,8 +486,8 @@ router.post(
         address: newVenue.address,
         city: newVenue.city,
         state: newVenue.state,
-        lat: newVenue.parseInt(lat),
-        lng: newVenue.parseInt(lng),
+        lat: newVenue.lat,
+        lng: newVenue.lng,
       });
     }
   }
@@ -746,7 +746,7 @@ router.post("/:groupId/membership", requireAuth, async (req, res) => {
     status: "pending",
   });
   return res.json({
-    memberId: newMembership.groupId,
+    memberId: newMembership.memberId,
     status: newMembership.status,
   });
 });
