@@ -224,6 +224,7 @@ router.get("/:eventId", async (req, res) => {
       message: "Event couldn't be found",
     });
   }
+  let price = event.price;
   let eventJSON = event.toJSON();
   let userCount = 0;
   if (!eventJSON.Users.length) {
