@@ -630,6 +630,7 @@ router.post(
   }
 );
 
+//Get members by groupid
 router.get("/:groupId/members", async (req, res) => {
   const group = await Group.findByPk(req.params.groupId);
   if (!group) {
@@ -734,7 +735,6 @@ router.post("/:groupId/membership", requireAuth, async (req, res) => {
   const membership = await Membership.findOne({
     where: { userId: user.id, groupId: group.id },
   });
-  console.log(membership);
   if (membership) {
     if (membership.status !== "Pending") {
       res.status(400);
@@ -753,6 +753,173 @@ router.post("/:groupId/membership", requireAuth, async (req, res) => {
     memberId: newMembership.memberId,
     status: newMembership.status,
   });
+});
+
+//Edit status of membership
+router.put("/:groupId/membership", requireAuth, async (req, res) => {
+  const group = await Group.findByPk(req.params.groupId);
+  if (!group) {
+    res.status(404);
+    return res.json({
+      message: "Group couldn't be found",
+    });
+  }
+  const organizerId = group.organizerId;
+  const user = await User.findByPk(req.user.id);
+  const membership = await Membership.findOne({
+    where: {
+      groupId: group.id,
+      userId: user.id,
+    },
+  });
+  if (membership) {
+    if (user.id === organizerId) {
+      const { memberId, status } = req.body;
+      if (status === "Pending") {
+        res.status(400);
+        return res.json({
+          message: "Validation Error",
+          errors: {
+            status: "Cannot change a membership status to pending",
+          },
+        });
+      }
+      const updatingUser = await User.findByPk(memberId);
+      if (!updatingUser) {
+        res.status(400);
+        return res.json({
+          message: "Validation Error",
+          errors: {
+            memberId: "User couldn't be found",
+          },
+        });
+      }
+      const updatingMem = await Membership.findOne({
+        where: {
+          groupId: group.id,
+          userId: updatingUser.id,
+        },
+      });
+      if (!updatingMem) {
+        res.status(404);
+        return res.json({
+          message: "Membership between the user and the group does not exist",
+        });
+      }
+      await updatingMem.update({
+        status: status,
+      });
+      return res.json({
+        id: updatingMem.id,
+        groupId: updatingMem.groupId,
+        memberId: updatingMem.userId,
+        status: updatingMem.status,
+      });
+    } else if (membership.status === "Co-host") {
+      const { memberId, status } = req.body;
+      if (status === "Co-host") {
+        res.status(403);
+        return res.json({
+          message: "Forbidden",
+        });
+      }
+      if (status === "Pending") {
+        res.status(400);
+        return res.json({
+          message: "Validation Error",
+          errors: {
+            status: "Cannot change a membership status to pending",
+          },
+        });
+      }
+      const updatingUser = await User.findByPk(memberId);
+      if (!updatingUser) {
+        res.status(400);
+        return res.json({
+          message: "Validation Error",
+          errors: {
+            memberId: "User couldn't be found",
+          },
+        });
+      }
+      const updatingMem = await Membership.findOne({
+        where: {
+          groupId: group.id,
+          userId: updatingUser.id,
+        },
+      });
+      if (!updatingMem) {
+        res.status(404);
+        return res.json({
+          message: "Membership between the user and the group does not exist",
+        });
+      }
+      await updatingMem.update({
+        status: status,
+      });
+      return res.json({
+        id: updatingMem.id,
+        groupId: updatingMem.groupId,
+        memberId: updatingMem.userId,
+        status: updatingMem.status,
+      });
+    } else {
+      res.status(403);
+      return res.json({
+        message: "Forbidden",
+      });
+    }
+  }
+  if (!membership) {
+    if (user.id !== organizerId) {
+      res.status(403);
+      return res.json({
+        message: "Forbidden",
+      });
+    }
+  } else {
+    const { memberId, status } = req.body;
+    if (status === "Pending") {
+      res.status(400);
+      return res.json({
+        message: "Validation Error",
+        errors: {
+          status: "Cannot change a membership status to pending",
+        },
+      });
+    }
+    const updatingUser = await User.findByPk(memberId);
+    if (!updatingUser) {
+      res.status(400);
+      return res.json({
+        message: "Validation Error",
+        errors: {
+          memberId: "User couldn't be found",
+        },
+      });
+    }
+    const updatingMem = await Membership.findOne({
+      where: {
+        groupId: group.id,
+        userId: updatingUser.id,
+      },
+    });
+    if (!updatingMem) {
+      res.status(404);
+      return res.json({
+        message: "Membership between the user and the group does not exist",
+      });
+    }
+    await updatingMem.update({
+      status: status,
+    });
+    return res.json({
+      id: updatingMem.id,
+      groupId: updatingMem.groupId,
+      memberId: updatingMem.userId,
+      status: updatingMem.status,
+    });
+  }
 });
 
 module.exports = router;
