@@ -13,6 +13,7 @@ const { requireAuth } = require("../../utils/auth.js");
 
 const { check } = require("express-validator");
 const { handleValidationErrors } = require("../../utils/validation");
+const membership = require("../../db/models/membership");
 
 const validateCreateGroup = [
   check("name")
@@ -714,6 +715,44 @@ router.get("/:groupId/members", async (req, res) => {
     membersObject.Members = membersList;
     return res.json(membersObject);
   }
+});
+
+//Request a membership for a group
+router.post("/:groupId/membership", requireAuth, async (req, res) => {
+  const group = await Group.findOne({
+    where: {
+      id: req.params.groupId,
+    },
+  });
+  if (!group) {
+    res.status(404);
+    return res.json({
+      message: "Group couldn't be found",
+    });
+  }
+  const user = await User.findByPk(req.user.id);
+  const membership = await Membership.findOne({
+    where: { userId: user.id, groupId: group.id },
+  });
+  console.log(membership);
+  if (membership) {
+    if (membership.status !== "Pending") {
+      res.status(400);
+      return res.json({ message: "User is already a member of the group" });
+    } else {
+      res.status(400);
+      return res.json({ message: "Membership has already been requested" });
+    }
+  }
+  const newMembership = await Membership.create({
+    userId: user.id,
+    groupId: group.id,
+    status: "Pending",
+  });
+  return res.json({
+    memberId: newMembership.memberId,
+    status: newMembership.status,
+  });
 });
 
 module.exports = router;
