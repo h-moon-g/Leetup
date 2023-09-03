@@ -246,7 +246,7 @@ router.get("/:eventId", async (req, res) => {
     },
   });
   eventJSON.Venue = venue;
-  eventJSON.price = eventJSON.price.toFixed(2);
+  eventJSON.price = price.toFixed(2);
   eventJSON.startDate = formattedDate(eventJSON.startDate);
   eventJSON.endDate = formattedDate(eventJSON.endDate);
   return res.json(eventJSON);
@@ -394,7 +394,7 @@ router.put("/:eventId", requireAuth, validateEvent, async (req, res) => {
       name: event.name,
       type: event.type,
       capacity: event.capacity,
-      price: event.price.toFixed(2),
+      price: price.toFixed(2),
       description: event.description,
       startDate: formattedDate(event.startDate),
       endDate: formattedDate(event.endDate),
