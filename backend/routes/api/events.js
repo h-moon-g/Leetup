@@ -360,4 +360,69 @@ router.delete("/:eventId", requireAuth, async (req, res) => {
   }
 });
 
+//Get attendeess by eventid
+router.get("/:eventId/attendees", async (req, res) => {
+  const event = await Event.findByPk(req.params.eventId);
+  if (!event) {
+    res.status(404);
+    return res.json({
+      message: "Event couldn't be found",
+    });
+  }
+  const attendeesObject = {};
+  let attendeesList = [];
+  const group = await Group.findByPk(event.groupId);
+  const organizerId = group.organizerId;
+  const user = await User.findByPk(req.user.id);
+  const membership = await Membership.findOne({
+    where: {
+      groupId: group.id,
+      userId: user.id,
+    },
+  });
+  if (user.id === organizerId || membership.status === "Co-host") {
+    const attendances = await Attendance.findAll({
+      where: {
+        eventId: event.id,
+      },
+    });
+    for (let i = 0; i < attendances.length; i++) {
+      let attendee = attendances[i];
+      const user = await User.findOne({
+        where: {
+          id: attendee.userId,
+        },
+        attributes: ["id", "firstName", "lastName"],
+      });
+      userJSON = user.toJSON();
+      userJSON.Attendance = { status: attendee.status };
+      attendeesList.push(userJSON);
+    }
+    attendeesObject.Attendees = attendeesList;
+    return res.json(attendeesObject);
+  } else {
+    const attendances = await Attendance.findAll({
+      where: {
+        eventId: event.id,
+      },
+    });
+    for (let i = 0; i < attendances.length; i++) {
+      let attendee = attendances[i];
+      const user = await User.findOne({
+        where: {
+          id: attendee.userId,
+        },
+        attributes: ["id", "firstName", "lastName"],
+      });
+      userJSON = user.toJSON();
+      userJSON.Attendance = { status: attendee.status };
+      if (attendee.status !== "Pending") {
+        attendeesList.push(userJSON);
+      }
+    }
+    attendeesObject.Attendees = attendeesList;
+    return res.json(attendeesObject);
+  }
+});
+
 module.exports = router;

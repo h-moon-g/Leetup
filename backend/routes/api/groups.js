@@ -649,50 +649,26 @@ router.get("/:groupId/members", async (req, res) => {
       userId: user.id,
     },
   });
-  if (membership) {
-    if (user.id === organizerId || membership.status === "Co-host") {
-      const memberships = await Membership.findAll({
+  if (user.id === organizerId || membership.status === "Co-host") {
+    const memberships = await Membership.findAll({
+      where: {
+        groupId: group.id,
+      },
+    });
+    for (let i = 0; i < memberships.length; i++) {
+      let member = memberships[i];
+      const user = await User.findOne({
         where: {
-          groupId: group.id,
+          id: member.userId,
         },
+        attributes: ["id", "firstName", "lastName"],
       });
-      for (let i = 0; i < memberships.length; i++) {
-        let member = memberships[i];
-        const user = await User.findOne({
-          where: {
-            id: member.userId,
-          },
-          attributes: ["id", "firstName", "lastName"],
-        });
-        userJSON = user.toJSON();
-        userJSON.Membership = { status: member.status };
-        membersList.push(userJSON);
-      }
-      membersObject.Members = membersList;
-      return res.json(membersObject);
-    } else {
-      const memberships = await Membership.findAll({
-        where: {
-          groupId: group.id,
-        },
-      });
-      for (let i = 0; i < memberships.length; i++) {
-        let member = memberships[i];
-        const user = await User.findOne({
-          where: {
-            id: member.userId,
-          },
-          attributes: ["id", "firstName", "lastName"],
-        });
-        userJSON = user.toJSON();
-        userJSON.Membership = { status: member.status };
-        if (member.status !== "Pending") {
-          membersList.push(userJSON);
-        }
-      }
-      membersObject.Members = membersList;
-      return res.json(membersObject);
+      userJSON = user.toJSON();
+      userJSON.Membership = { status: member.status };
+      membersList.push(userJSON);
     }
+    membersObject.Members = membersList;
+    return res.json(membersObject);
   } else {
     const memberships = await Membership.findAll({
       where: {
