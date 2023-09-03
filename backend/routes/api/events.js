@@ -477,4 +477,72 @@ router.post("/:eventId/attendance", requireAuth, async (req, res) => {
   }
 });
 
+//Edit status of attendance
+router.put("/:eventId/attendance", requireAuth, async (req, res) => {
+  const event = await Event.findByPk(req.params.eventId);
+  if (!event) {
+    res.status(404);
+    return res.json({
+      message: "Event couldn't be found",
+    });
+  }
+  const group = await Group.findByPk(event.groupId);
+  const organizerId = group.organizerId;
+  const user = await User.findByPk(req.user.id);
+  const membership = await Membership.findOne({
+    where: {
+      groupId: group.id,
+      userId: user.id,
+    },
+  });
+  if (user.id !== organizerId && membership.status !== "Co-host") {
+    res.status(403);
+    return res.json({
+      message: "Forbidden",
+    });
+  } else {
+    const { userId, status } = req.body;
+    if (status === "Pending") {
+      res.status(400);
+      return res.json({
+        message: "Validation Error",
+        errors: {
+          status: "Cannot change an attendance status to pending",
+        },
+      });
+    }
+    const updatingUser = await User.findByPk(userId);
+    if (!updatingUser) {
+      res.status(400);
+      return res.json({
+        message: "Validation Error",
+        errors: {
+          memberId: "User couldn't be found",
+        },
+      });
+    }
+    const updatingAtten = await Attendance.findOne({
+      where: {
+        eventId: event.id,
+        userId: updatingUser.id,
+      },
+    });
+    if (!updatingAtten) {
+      res.status(404);
+      return res.json({
+        message: "Attendance between the user and the event does not exist",
+      });
+    }
+    await updatingAtten.update({
+      status: status,
+    });
+    return res.json({
+      id: updatingAtten.id,
+      eventId: updatingAtten.eventId,
+      userId: updatingAtten.userId,
+      status: updatingAtten.status,
+    });
+  }
+});
+
 module.exports = router;
