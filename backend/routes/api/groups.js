@@ -898,7 +898,7 @@ router.put("/:groupId/membership", requireAuth, async (req, res) => {
   }
 });
 
-//Delete a group
+//Delete a membership
 router.delete("/:groupId/membership", requireAuth, async (req, res) => {
   const group = await Group.findByPk(req.params.groupId);
   if (!group) {
