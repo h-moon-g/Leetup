@@ -11,10 +11,10 @@ const { handleValidationErrors } = require("../../utils/validation");
 const validateSignup = [
   check("firstName")
     .exists({ checkFalsy: true })
-    .withMessage("Please provide a valid first name."),
+    .withMessage("First Name is required"),
   check("lastName")
     .exists({ checkFalsy: true })
-    .withMessage("Please provide a valid last name."),
+    .withMessage("Last Name is required"),
   check("firstName")
     .not()
     .isEmail()
@@ -26,7 +26,7 @@ const validateSignup = [
   check("email")
     .exists({ checkFalsy: true })
     .isEmail()
-    .withMessage("Please provide a valid email."),
+    .withMessage("Invalid email"),
   check("username")
     .exists({ checkFalsy: true })
     .isLength({ min: 4 })
