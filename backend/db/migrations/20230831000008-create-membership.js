@@ -19,11 +19,11 @@ module.exports = {
         },
         userId: {
           type: Sequelize.INTEGER,
-          references: { model: "Users" },
+          references: { model: "Users", foreignKey: "id" },
         },
         groupId: {
           type: Sequelize.INTEGER,
-          references: { model: "Groups" },
+          references: { model: "Groups", foreignKey: "id" },
         },
         status: {
           type: Sequelize.ENUM("Host", "Co-host", "Member", "Pending"),
