@@ -19,7 +19,7 @@ module.exports = {
         },
         eventId: {
           type: Sequelize.INTEGER,
-          references: { model: "Events", foreignKey: "id" },
+          references: { model: "Events" },
           onDelete: "CASCADE",
           hooks: true,
         },

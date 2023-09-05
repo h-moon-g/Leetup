@@ -19,7 +19,7 @@ module.exports = {
         },
         groupId: {
           type: Sequelize.INTEGER,
-          references: { model: "Groups", foreignKey: "id" },
+          references: { model: "Groups" },
           onDelete: "CASCADE",
           hooks: true,
         },

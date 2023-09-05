@@ -19,11 +19,11 @@ module.exports = {
         },
         venueId: {
           type: Sequelize.INTEGER,
-          references: { model: "Venues", foreignKey: 'id' },
+          references: { model: "Venues" },
         },
         groupId: {
           type: Sequelize.INTEGER,
-          references: { model: "Groups", foreignKey: 'id' },
+          references: { model: "Groups" },
         },
         name: {
           type: Sequelize.STRING,
