@@ -37,6 +37,21 @@ export const login = (user) => async (dispatch) => {
   return response;
 };
 
+export const demoUser = () => async (dispatch) => {
+  const credential = "FakeUser2";
+  const password = "password2";
+  const response = await csrfFetch("/api/session", {
+    method: "POST",
+    body: JSON.stringify({
+      credential,
+      password,
+    }),
+  });
+  const data = await response.json();
+  dispatch(setUser(data.user));
+  return response;
+};
+
 export const signup = (user) => async (dispatch) => {
   const { username, firstName, lastName, email, password } = user;
   const response = await csrfFetch("/api/users", {

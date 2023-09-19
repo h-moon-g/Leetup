@@ -24,6 +24,11 @@ function LoginFormModal() {
       });
   };
 
+  const handleDemoUser = (e) => {
+    e.preventDefault();
+    return dispatch(sessionActions.demoUser()).then(closeModal);
+  };
+
   return (
     <>
       <h1>Log In</h1>
@@ -48,6 +53,7 @@ function LoginFormModal() {
         </label>
         {errors.credential && <p>{errors.credential}</p>}
         <button type="submit">Log In</button>
+        <button onClick={handleDemoUser}>Demo User</button>
       </form>
     </>
   );
