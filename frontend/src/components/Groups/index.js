@@ -33,6 +33,7 @@ function Groups() {
                 <li>{group.city}</li>
                 <li>{group.state}</li>
                 <li>{group.numMembers}</li>
+                <li>{group.private.toString()}</li>
               </ul>
             </div>
           );
