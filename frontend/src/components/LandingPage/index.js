@@ -17,7 +17,10 @@ function LandingPage() {
           pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
           culpa qui officia deserunt mollit anim id est laborum.
         </p>
-        <img src="leetup_img_1.jpg" alt="leetup Img 1"></img>
+        <img
+          src="https://cdn.discordapp.com/attachments/324927814270713866/1155965761295224842/image.png"
+          alt="leetup Img 1"
+        ></img>
       </div>
       <div>
         <h3 class="lp-h3">How Leetup Works</h3>
@@ -27,19 +30,28 @@ function LandingPage() {
         </p>
       </div>
       <div>
-        <img src="leetup_img_2.jpg" alt="leetup Img 2"></img>
+        <img
+          src="https://cdn.discordapp.com/attachments/324927814270713866/1155965894833479691/image.png"
+          alt="leetup Img 2"
+        ></img>
         <a href="">See all groups</a>
         <p class="lp-p-filler">
           Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
           eiusmod tempor incididunt ut labore et dolore magna aliqua.
         </p>
-        <img src="leetup_img_3.jpg" alt="leetup Img 3"></img>
+        <img
+          src="https://cdn.discordapp.com/attachments/324927814270713866/1155965944959615056/image.png"
+          alt="leetup Img 3"
+        ></img>
         <a href="">Find an event</a>
         <p class="lp-p-filler">
           Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
           eiusmod tempor incididunt ut labore et dolore magna aliqua.
         </p>
-        <img src="leetup_img_4.jpg" alt="leetup Img 4"></img>
+        <img
+          src="https://cdn.discordapp.com/attachments/324927814270713866/1155966097267367946/image.png"
+          alt="leetup Img 4"
+        ></img>
         <a href="">Start a new group</a>
         <p class="lp-p-filler">
           Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
