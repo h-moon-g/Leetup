@@ -1,14 +1,15 @@
 import React from "react";
+import { NavLink } from "react-router-dom";
 import "./LandingPage.css";
 
 function LandingPage() {
   return (
     <>
       <div>
-        <h1 class="lp-h1">The people platform-</h1>
-        <h1 class="lp-h1">Where interests</h1>
-        <h1 class="lp-h1">become friendships</h1>
-        <p class="lp-p-filler">
+        <h1 className="lp-h1">The people platform-</h1>
+        <h1 className="lp-h1">Where interests</h1>
+        <h1 className="lp-h1">become friendships</h1>
+        <p className="lp-p-filler">
           Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
           eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
           minim veniam, quis nostrud exercitation ullamco laboris nisi ut
@@ -23,8 +24,8 @@ function LandingPage() {
         ></img>
       </div>
       <div>
-        <h3 class="lp-h3">How Leetup Works</h3>
-        <p class="lp-p-filler">
+        <h3 className="lp-h3">How Leetup Works</h3>
+        <p className="lp-p-filler">
           Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
           eiusmod tempor incididunt ut labore et dolore magna aliqua.
         </p>
@@ -34,8 +35,8 @@ function LandingPage() {
           src="https://cdn.discordapp.com/attachments/324927814270713866/1155965894833479691/image.png"
           alt="leetup Img 2"
         ></img>
-        <a href="">See all groups</a>
-        <p class="lp-p-filler">
+        <NavLink to="/groups">See all groups</NavLink>
+        <p className="lp-p-filler">
           Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
           eiusmod tempor incididunt ut labore et dolore magna aliqua.
         </p>
@@ -43,8 +44,8 @@ function LandingPage() {
           src="https://cdn.discordapp.com/attachments/324927814270713866/1155965944959615056/image.png"
           alt="leetup Img 3"
         ></img>
-        <a href="">Find an event</a>
-        <p class="lp-p-filler">
+        <NavLink to="/events">Find an event</NavLink>
+        <p className="lp-p-filler">
           Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
           eiusmod tempor incididunt ut labore et dolore magna aliqua.
         </p>
@@ -53,7 +54,7 @@ function LandingPage() {
           alt="leetup Img 4"
         ></img>
         <a href="">Start a new group</a>
-        <p class="lp-p-filler">
+        <p className="lp-p-filler">
           Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
           eiusmod tempor incididunt ut labore et dolore magna aliqua.
         </p>
