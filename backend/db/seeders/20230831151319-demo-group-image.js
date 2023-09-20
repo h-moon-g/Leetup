@@ -13,22 +13,22 @@ module.exports = {
       [
         {
           groupId: 1,
-          url: "https://www.google.com/url?sa=i&url=https%3A%2F%2Fstock.adobe.com%2Fsearch%3Fk%3Dcat&psig=AOvVaw0ZLTg1nn1JXgSbdEOfcca1&ust=1693956572607000&source=images&cd=vfe&opi=89978449&ved=0CA8QjRxqFwoTCOiI8ZCOkoEDFQAAAAAdAAAAABAE",
+          url: "https://static.vecteezy.com/system/resources/thumbnails/002/098/204/small/silver-tabby-cat-sitting-on-green-background-free-photo.jpg",
           preview: true,
         },
         {
           groupId: 1,
-          url: "https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.pexels.com%2Fsearch%2Fcat%2F&psig=AOvVaw2Qj09MWGsjI04hp4pEw3Uh&ust=1694119438452000&source=images&cd=vfe&opi=89978449&ved=0CA8QjRxqFwoTCLC7mezsloEDFQAAAAAdAAAAABAE",
+          url: "https://media.istockphoto.com/id/1322123064/photo/portrait-of-an-adorable-white-cat-in-sunglasses-and-an-shirt-lies-on-a-fabric-hammock.jpg?s=612x612&w=0&k=20&c=-G6l2c4jNI0y4cenh-t3qxvIQzVCOqOYZNvrRA7ZU5o=",
           preview: false,
         },
         {
           groupId: 2,
-          url: "https://www.google.com/url?sa=i&url=https%3A%2F%2Fpixabay.com%2Fimages%2Fsearch%2Fcat%2F&psig=AOvVaw0ZLTg1nn1JXgSbdEOfcca1&ust=1693956572607000&source=images&cd=vfe&opi=89978449&ved=0CA8QjRxqFwoTCOiI8ZCOkoEDFQAAAAAdAAAAABAJ",
+          url: "https://images.all-free-download.com/images/graphiclarge/cat_cat_face_cats_eyes_240527.jpg",
           preview: true,
         },
         {
           groupId: 3,
-          url: "https://www.google.com/url?sa=i&url=https%3A%2F%2Fstock.adobe.com%2Fsearch%3Fk%3Dcat&psig=AOvVaw0ZLTg1nn1JXgSbdEOfcca1&ust=1693956572607000&source=images&cd=vfe&opi=89978449&ved=0CA8QjRxqFwoTCOiI8ZCOkoEDFQAAAAAdAAAAABAP",
+          url: "https://images.unsplash.com/photo-1602418013963-c1f017b3bb63?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8YmVhdXRpZnVsJTIwY2F0fGVufDB8fDB8fHww&w=1000&q=80",
           preview: true,
         },
       ],
