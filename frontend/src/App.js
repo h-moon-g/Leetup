@@ -6,6 +6,7 @@ import Navigation from "./components/Navigation";
 import LandingPage from "./components/LandingPage";
 import Groups from "./components/Groups";
 import Events from "./components/Events";
+import GetOneGroup from "./components/GetOneGroup";
 
 function App() {
   const dispatch = useDispatch();
@@ -24,6 +25,9 @@ function App() {
           </Route>
           <Route exact path="/groups">
             <Groups />
+          </Route>
+          <Route path="/groups/:groupId">
+            <GetOneGroup />
           </Route>
           <Route exact path="/events">
             <Events />
