@@ -70,7 +70,6 @@ function Groups() {
         <div>
           <h3>Organizer</h3>
           <h4>
-            {" "}
             {group.Organizer.firstName} {group.Organizer.lastName}
           </h4>
           <h3>What we're about</h3>

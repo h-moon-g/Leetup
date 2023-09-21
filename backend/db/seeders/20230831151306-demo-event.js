@@ -25,7 +25,7 @@ module.exports = {
         },
         {
           venueId: 1,
-          groupId: 1,
+          groupId: 3,
           name: "Event in Past",
           description: "This is an event in the past!",
           type: "In person",
@@ -43,8 +43,8 @@ module.exports = {
           type: "In person",
           capacity: 24,
           price: 20.0,
-          startDate: "2024-09-03",
-          endDate: "2024-09-03",
+          startDate: "2023-09-03",
+          endDate: "2023-09-03",
         },
         {
           venueId: 3,
@@ -54,8 +54,8 @@ module.exports = {
           type: "In person",
           capacity: 64,
           price: 6.5,
-          startDate: "2023-09-02",
-          endDate: "2023-09-03",
+          startDate: "2024-09-02",
+          endDate: "2024-09-03",
         },
       ],
       { validate: true }
