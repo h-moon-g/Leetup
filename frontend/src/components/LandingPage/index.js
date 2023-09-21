@@ -1,8 +1,27 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
+import { useSelector } from "react-redux";
+import OpenModalButton from "../OpenModalButton";
+import SignupFormModal from "../SignupFormModal";
 import "./LandingPage.css";
 
 function LandingPage() {
+  const session = useSelector((state) => {
+    return state.session;
+  });
+  let jlButton = null;
+  let sangLink = null;
+  if (!session.user) {
+    jlButton = (
+      <OpenModalButton
+        buttonText="Join Leetup"
+        modalComponent={<SignupFormModal />}
+      />
+    );
+    sangLink = <h5>Start a new group</h5>;
+  } else {
+    sangLink = <NavLink to="/groups/new">Start a new group</NavLink>;
+  }
   return (
     <>
       <div>
@@ -53,13 +72,15 @@ function LandingPage() {
           src="https://cdn.discordapp.com/attachments/324927814270713866/1155966097267367946/image.png"
           alt="leetup Img 4"
         ></img>
-        <a href="">Start a new group</a>
+      </div>
+      <div>
+        <div>{sangLink}</div>
         <p className="lp-p-filler">
           Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
           eiusmod tempor incididunt ut labore et dolore magna aliqua.
         </p>
       </div>
-      <button>Join Leetup</button>
+      <div>{jlButton}</div>
     </>
   );
 }

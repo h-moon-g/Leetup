@@ -16,10 +16,6 @@ function Events() {
 
   const event = useSelector((state) => state.event);
 
-  if (!Object.values(event).length) {
-    return null;
-  }
-
   return (
     <>
       <div>
