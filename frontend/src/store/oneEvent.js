@@ -1,3 +1,5 @@
+import { csrfFetch } from "./csrf";
+
 const LOAD = "oneEvent/LOAD";
 
 const load = (list) => ({
@@ -6,7 +8,7 @@ const load = (list) => ({
 });
 
 export const getOneEvent = (id) => async (dispatch) => {
-  const response = await fetch(`/api/events/${id}`);
+  const response = await csrfFetch(`/api/events/${id}`);
 
   if (response.ok) {
     const group = await response.json();

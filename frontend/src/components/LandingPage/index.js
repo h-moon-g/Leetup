@@ -20,7 +20,7 @@ function LandingPage() {
     );
     sangLink = <h5>Start a new group</h5>;
   } else {
-    sangLink = <NavLink to="/groups/new">Start a new group</NavLink>;
+    sangLink = <NavLink to="/groups">Start a new group</NavLink>;
   }
   return (
     <>
