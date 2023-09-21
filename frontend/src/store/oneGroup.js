@@ -14,17 +14,17 @@ export const getOneGroup = (id) => async (dispatch) => {
   }
 };
 
-const initialState = {
-  list: [],
-};
+const initialState = {};
 
 const groupReducer = (state = initialState, action) => {
   switch (action.type) {
     case LOAD:
-      return {
-        ...action.list,
+      const newState = {
         ...state,
+        ...action.list,
       };
+      console.log(newState);
+      return newState;
     default:
       return state;
   }

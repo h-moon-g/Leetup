@@ -32,8 +32,8 @@ const groupsReducer = (state = initialState, action) => {
         allGroups[group.id] = group;
       });
       return {
-        ...allGroups,
         ...state,
+        ...allGroups,
         list: sortList(action.list),
       };
     default:

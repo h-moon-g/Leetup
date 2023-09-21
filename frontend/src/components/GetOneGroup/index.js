@@ -8,24 +8,28 @@ import { getEvents } from "../../store/events";
 import { useDispatch, useSelector } from "react-redux";
 
 function Groups() {
-  const { groupId } = useParams();
+  const { id } = useParams();
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(getOneGroup(groupId));
-  }, [dispatch, groupId]);
+    dispatch(getOneGroup(id));
+  }, [dispatch, id]);
 
   useEffect(() => {
     dispatch(getEvents());
   }, [dispatch]);
 
-  const group = useSelector((state) => {
-    return state.group;
-  });
+  const group = useSelector((state) => state.group);
+
+  console.log("here is group ==>" + group);
 
   const events = useSelector((state) => {
     return state.events.list.map((eventId) => state.events[eventId]);
   });
+
+  if (!Object.values(group).length) {
+    return null;
+  }
 
   let previewImage;
   group.GroupImages.forEach((image) => {
@@ -33,50 +37,49 @@ function Groups() {
       previewImage = image.url;
     }
   });
-  let groupPrivacy;
-  let numEvents = 0;
   let location = `${group.city}, ${group.state}`;
+  let numEvents = 0;
   events.forEach((event) => {
     if (event.groupId === group.id) {
       numEvents++;
     }
   });
-  if (numEvents === 1) {
-    numEvents = "1 event";
-  } else {
-    numEvents = `${numEvents} events`;
-  }
+  let groupPrivacy;
   if (group.private === false) {
     groupPrivacy = "Public";
   } else {
     groupPrivacy = "Private";
   }
-
   return (
     <>
       <div>
         <NavLink to="/groups">Groups</NavLink>
-        <div>
-          <h1>{group.name}</h1>
-          <img src={previewImage} alt="leetup Img"></img>
-          <h3>{location}</h3>
-          <h3>{groupPrivacy}</h3>
-          <h3>{numEvents}</h3>
-          <h3>
-            Organized by {group.Organizer.firstName} {group.Organizer.lastName}
-          </h3>
-          <button>Join this Group</button>
-        </div>
-        <div>
-          <h3>Organizer</h3>
-          <h4>
-            {" "}
-            {group.Organizer.firstName} {group.Organizer.lastName}
-          </h4>
-          <h3>What we're about</h3>
-          <h6>{group.about}</h6>
-          <h6></h6>
-        </div>
+        <h1>{group.name}</h1>
+        <img src={previewImage} alt="preview Image"></img>
+        <h3>{location}</h3>
+        <h3>{numEvents} events</h3>
+        <h3>{groupPrivacy}</h3>
+        <h3>
+          Organized by {group.Organizer.firstName} {group.Organizer.lastName}
+        </h3>
+        <button>Join this group</button>
+      </div>
+      <div>
+        <h4>Organizer</h4>
+        <h4>
+          {group.Organizer.firstName} {group.Organizer.lastName}
+        </h4>
+        <h4>What we're about</h4>
+        <h5>{group.about}</h5>
+        <h5>
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+          eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
+          minim veniam, quis nostrud exercitation ullamco laboris nisi ut
+          aliquip ex ea commodo consequat. Duis aute irure dolor in
+          reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
+          pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
+          culpa qui officia deserunt mollit anim id est laborum.
+        </h5>
       </div>
     </>
   );
