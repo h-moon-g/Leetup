@@ -34,8 +34,8 @@ const eventsReducer = (state = initialState, action) => {
         allEvents[event.id] = event;
       });
       return {
-        ...allEvents,
         ...state,
+        ...allEvents,
         list: sortList(action.list),
       };
     default:

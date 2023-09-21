@@ -8,11 +8,15 @@ const load = (list) => ({
 });
 
 export const getOneGroup = (id) => async (dispatch) => {
-  const response = await csrfFetch(`/api/groups/${id}`);
+  try {
+    const response = await csrfFetch(`/api/groups/${id}`);
 
-  if (response.ok) {
-    const group = await response.json();
-    dispatch(load(group));
+    if (response.ok) {
+      const group = await response.json();
+      dispatch(load(group));
+    }
+  } catch (error) {
+    console.error(error);
   }
 };
 
