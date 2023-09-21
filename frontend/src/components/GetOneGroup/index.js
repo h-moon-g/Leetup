@@ -21,8 +21,6 @@ function Groups() {
 
   const group = useSelector((state) => state.group);
 
-  console.log("here is group ==>" + group);
-
   const events = useSelector((state) => {
     return state.events.list.map((eventId) => state.events[eventId]);
   });
@@ -38,10 +36,10 @@ function Groups() {
     }
   });
   let location = `${group.city}, ${group.state}`;
-  let numEvents = 0;
+  let groupEvents = [];
   events.forEach((event) => {
     if (event.groupId === group.id) {
-      numEvents++;
+      groupEvents.push(event);
     }
   });
   let groupPrivacy;
@@ -50,6 +48,69 @@ function Groups() {
   } else {
     groupPrivacy = "Private";
   }
+  let futureEvents = [];
+  let pastEvents = [];
+  const today = new Date();
+  groupEvents.forEach((event) => {
+    const eventDate = new Date(event.endDate);
+    if (eventDate < today) {
+      pastEvents.push(event);
+    } else {
+      futureEvents.push(event);
+    }
+  });
+  let pastContent = null;
+  let futureContent = null;
+  if (pastEvents.length !== 0) {
+    pastContent = (
+      <div>
+        <h2>Past Events {pastEvents.length}</h2>
+        {pastEvents.map((event) => {
+          return (
+            <div>
+              <img src={event.previewImage} alt="preview Image"></img>;
+              <h3>{event.startDate}</h3>
+              <h3>{event.name}</h3>
+              <h3>
+                {event.Venue.city}, {event.Venue.state}
+              </h3>
+              <h4>
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+                eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
+                enim ad minim veniam, quis nostrud exercitation ullamco laboris
+                nisi ut aliquip ex ea commodo consequat.
+              </h4>
+            </div>
+          );
+        })}
+      </div>
+    );
+  }
+  if (futureEvents.length !== 0) {
+    futureContent = (
+      <div>
+        <h2>Upcoming Events {futureEvents.length}</h2>
+        {futureEvents.map((event) => {
+          return (
+            <div>
+              <img src={event.previewImage} alt="preview Image"></img>;
+              <h3>{event.startDate}</h3>
+              <h3>{event.name}</h3>
+              <h3>
+                {event.Venue.city}, {event.Venue.state}
+              </h3>
+              <h4>
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+                eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
+                enim ad minim veniam, quis nostrud exercitation ullamco laboris
+                nisi ut aliquip ex ea commodo consequat.
+              </h4>
+            </div>
+          );
+        })}
+      </div>
+    );
+  }
   return (
     <>
       <div>
@@ -57,7 +118,7 @@ function Groups() {
         <h1>{group.name}</h1>
         <img src={previewImage} alt="preview Image"></img>
         <h3>{location}</h3>
-        <h3>{numEvents} events</h3>
+        <h3>{groupEvents.length} events</h3>
         <h3>{groupPrivacy}</h3>
         <h3>
           Organized by {group.Organizer.firstName} {group.Organizer.lastName}
@@ -81,6 +142,8 @@ function Groups() {
           culpa qui officia deserunt mollit anim id est laborum.
         </h5>
       </div>
+      <div>{futureContent}</div>
+      <div>{pastContent}</div>
     </>
   );
 }
