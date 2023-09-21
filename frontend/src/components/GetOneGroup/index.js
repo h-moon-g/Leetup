@@ -67,20 +67,22 @@ function Groups() {
         <h2>Past Events {pastEvents.length}</h2>
         {pastEvents.map((event) => {
           return (
-            <div>
-              <img src={event.previewImage} alt="preview Image"></img>;
-              <h3>{event.startDate}</h3>
-              <h3>{event.name}</h3>
-              <h3>
-                {event.Venue.city}, {event.Venue.state}
-              </h3>
-              <h4>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-                eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
-                enim ad minim veniam, quis nostrud exercitation ullamco laboris
-                nisi ut aliquip ex ea commodo consequat.
-              </h4>
-            </div>
+            <NavLink to={`/events/${event.id}`}>
+              <div>
+                <img src={event.previewImage} alt="preview Image"></img>;
+                <h3>{event.startDate}</h3>
+                <h3>{event.name}</h3>
+                <h3>
+                  {event.Venue.city}, {event.Venue.state}
+                </h3>
+                <h4>
+                  Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
+                  do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+                  Ut enim ad minim veniam, quis nostrud exercitation ullamco
+                  laboris nisi ut aliquip ex ea commodo consequat.
+                </h4>
+              </div>
+            </NavLink>
           );
         })}
       </div>
@@ -92,20 +94,22 @@ function Groups() {
         <h2>Upcoming Events {futureEvents.length}</h2>
         {futureEvents.map((event) => {
           return (
-            <div>
-              <img src={event.previewImage} alt="preview Image"></img>;
-              <h3>{event.startDate}</h3>
-              <h3>{event.name}</h3>
-              <h3>
-                {event.Venue.city}, {event.Venue.state}
-              </h3>
-              <h4>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-                eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
-                enim ad minim veniam, quis nostrud exercitation ullamco laboris
-                nisi ut aliquip ex ea commodo consequat.
-              </h4>
-            </div>
+            <NavLink to={`/events/${event.id}`}>
+              <div>
+                <img src={event.previewImage} alt="preview Image"></img>;
+                <h3>{event.startDate}</h3>
+                <h3>{event.name}</h3>
+                <h3>
+                  {event.Venue.city}, {event.Venue.state}
+                </h3>
+                <h4>
+                  Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
+                  do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+                  Ut enim ad minim veniam, quis nostrud exercitation ullamco
+                  laboris nisi ut aliquip ex ea commodo consequat.
+                </h4>
+              </div>
+            </NavLink>
           );
         })}
       </div>
