@@ -1,12 +1,12 @@
-const LOAD = "oneGroup/LOAD";
+const LOAD = "oneEvent/LOAD";
 
 const load = (list) => ({
   type: LOAD,
   list,
 });
 
-export const getOneGroup = (id) => async (dispatch) => {
-  const response = await fetch(`/api/groups/${id}`);
+export const getOneEvent = (id) => async (dispatch) => {
+  const response = await fetch(`/api/events/${id}`);
 
   if (response.ok) {
     const group = await response.json();
@@ -16,7 +16,7 @@ export const getOneGroup = (id) => async (dispatch) => {
 
 const initialState = {};
 
-const groupReducer = (state = initialState, action) => {
+const eventReducer = (state = initialState, action) => {
   switch (action.type) {
     case LOAD:
       const newState = {
@@ -29,4 +29,4 @@ const groupReducer = (state = initialState, action) => {
   }
 };
 
-export default groupReducer;
+export default eventReducer;
