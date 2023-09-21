@@ -26,7 +26,7 @@ function App() {
           <Route exact path="/groups">
             <Groups />
           </Route>
-          <Route path="/groups/:groupId">
+          <Route exact path="/groups/:id">
             <GetOneGroup />
           </Route>
           <Route exact path="/events">

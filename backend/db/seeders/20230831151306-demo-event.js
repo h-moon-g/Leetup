@@ -24,17 +24,6 @@ module.exports = {
           endDate: "2024-09-01",
         },
         {
-          venueId: 1,
-          groupId: 3,
-          name: "Event in Past",
-          description: "This is an event in the past!",
-          type: "In person",
-          capacity: 50,
-          price: 0.0,
-          startDate: "2023-09-01",
-          endDate: "2023-09-01",
-        },
-        {
           venueId: 2,
           groupId: 1,
           name: "Sunday Night Modern Tournament",
@@ -43,8 +32,8 @@ module.exports = {
           type: "In person",
           capacity: 24,
           price: 20.0,
-          startDate: "2023-09-03",
-          endDate: "2023-09-03",
+          startDate: "2024-09-03",
+          endDate: "2024-09-03",
         },
         {
           venueId: 3,
