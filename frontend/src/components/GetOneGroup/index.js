@@ -1,6 +1,6 @@
 import React from "react";
 import { useEffect } from "react";
-import { NavLink, useParams } from "react-router-dom";
+import { NavLink, useParams, Redirect, useHistory } from "react-router-dom";
 import "./GetOneGroup.css";
 
 import { getOneGroup } from "../../store/oneGroup";
@@ -27,15 +27,23 @@ function Groups() {
     return state.events.list.map((eventId) => state.events[eventId]);
   });
 
+  let history = useHistory();
+
+  let updateButton = (e) => {
+    e.preventDefault();
+    history.push(`/groups/${group.id}/edit`);
+  };
+
   if (!Object.values(group).length) {
     return null;
   }
+
   let button;
   if (user.id === group.organizerId) {
     button = (
       <div>
         <button>Create event</button>
-        <button>Update</button>
+        <button onClick={updateButton}>Update</button>
         <button>Delete</button>
       </div>
     );
