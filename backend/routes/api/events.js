@@ -143,7 +143,7 @@ router.get("", async (req, res) => {
     where,
     ...pagination,
     attributes: {
-      exclude: ["description", "capacity", "price", "createdAt", "updatedAt"],
+      exclude: ["capacity", "price", "createdAt", "updatedAt"],
     },
     include: [
       {

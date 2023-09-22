@@ -20,7 +20,7 @@ function CreateGroup() {
 
   const validateImg = () => {
     if (!url) {
-      setImgErrors({ url: "Image URL must end in .png, .jpg, or .jpeg" });
+      setImgErrors({ url: "Image URL required" });
       return false;
     }
     if (
