@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Redirect } from "react-router-dom";
+import { Redirect, useHistory } from "react-router-dom";
 import { createGroup } from "../../store/oneGroup";
 
 function CreateGroup() {
@@ -13,10 +13,12 @@ function CreateGroup() {
   const [state, setState] = useState("");
   const [errors, setErrors] = useState({});
 
+  const history = useHistory();
+
   const handleSubmit = (e) => {
     e.preventDefault();
     setErrors({});
-    return dispatch(
+    let createdGroup = dispatch(
       createGroup({
         name,
         about,
@@ -25,7 +27,15 @@ function CreateGroup() {
         city,
         state,
       })
-    );
+    ).catch(async (res) => {
+      const data = await res.json();
+      if (data && data.errors) {
+        setErrors(data.errors);
+      }
+    });
+    if (createdGroup.id !== undefined) {
+      history.push(`/groups/${createdGroup.id}`);
+    }
   };
 
   return (
@@ -48,7 +58,6 @@ function CreateGroup() {
           name="city"
           value={city}
           onChange={(e) => setCity(e.target.value)}
-          required
         />
         {errors.city && <p>{errors.city}</p>}
         <input
@@ -57,7 +66,6 @@ function CreateGroup() {
           name="state"
           value={state}
           onChange={(e) => setState(e.target.value)}
-          required
         />
         {errors.state && <p>{errors.state}</p>}
         <label htmlFor="name">What will your group's name be?</label>
@@ -72,7 +80,6 @@ function CreateGroup() {
           name="name"
           value={name}
           onChange={(e) => setName(e.target.value)}
-          required
         />
         {errors.name && <p>{errors.name}</p>}
         <label htmlFor="about">
@@ -91,7 +98,6 @@ function CreateGroup() {
           name="about"
           value={about}
           onChange={(e) => setAbout(e.target.value)}
-          required
         />
         {errors.about && <p>{errors.about}</p>}
         <label>Final steps...</label>
@@ -100,7 +106,6 @@ function CreateGroup() {
           name="type"
           value={type}
           onChange={(e) => setType(e.target.value)}
-          required
         >
           <option value="">select one</option>
           <option value="In person">In person</option>
@@ -112,7 +117,6 @@ function CreateGroup() {
           name="privacy"
           value={privacy}
           onChange={(e) => setPrivacy(e.target.value)}
-          required
         >
           <option value="">select one</option>
           <option value="true">Private</option>
