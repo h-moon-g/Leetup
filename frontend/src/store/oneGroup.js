@@ -2,6 +2,7 @@ import { csrfFetch } from "./csrf";
 
 const LOAD = "oneGroup/LOAD";
 const SET_GROUP = "oneGroup/SET_GROUP";
+const CHANGE_GROUP = "oneGroup/UPDATE_GROUP";
 
 const load = (list) => ({
   type: LOAD,
@@ -11,6 +12,13 @@ const load = (list) => ({
 const setGroup = (group) => {
   return {
     type: SET_GROUP,
+    payload: group,
+  };
+};
+
+const changeGroup = (group) => {
+  return {
+    type: CHANGE_GROUP,
     payload: group,
   };
 };
@@ -48,6 +56,29 @@ export const createGroup = (group) => async (dispatch) => {
   });
   const data = await response.json();
   dispatch(setGroup(data.group));
+  return response;
+};
+
+export const updateGroup = (group) => async (dispatch) => {
+  let { id, name, about, type, privacy, city, state } = group;
+  if (privacy === "true") {
+    privacy = true;
+  } else {
+    privacy = false;
+  }
+  const response = await csrfFetch(`/api/groups/${id}`, {
+    method: "PUT",
+    body: JSON.stringify({
+      name,
+      about,
+      type,
+      private: privacy,
+      city,
+      state,
+    }),
+  });
+  const data = await response.json();
+  dispatch(changeGroup(data.group));
   return response;
 };
 

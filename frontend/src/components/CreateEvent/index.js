@@ -19,8 +19,6 @@ function CreateEvent() {
 
   const { id } = useParams();
 
-  console.log(id);
-
   useEffect(() => {
     dispatch(getOneGroup(id));
   }, [dispatch, id]);
