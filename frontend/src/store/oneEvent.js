@@ -2,6 +2,7 @@ import { csrfFetch } from "./csrf";
 
 const LOAD = "oneEvent/LOAD";
 const SET_EVENT = "oneEvent/SET_EVENT";
+const REMOVE_EVENT = "session/REMOVE_EVENT";
 
 const load = (list) => ({
   type: LOAD,
@@ -12,6 +13,12 @@ const setEvent = (event) => {
   return {
     type: SET_EVENT,
     payload: event,
+  };
+};
+
+const removeEvent = () => {
+  return {
+    type: REMOVE_EVENT,
   };
 };
 
@@ -44,6 +51,14 @@ export const createEvent = (event) => async (dispatch) => {
   });
   const data = await response.json();
   dispatch(setEvent(data.group));
+  return response;
+};
+
+export const deleteEvent = (id) => async (dispatch) => {
+  const response = await csrfFetch(`/api/events/${id}`, {
+    method: "DELETE",
+  });
+  dispatch(removeEvent());
   return response;
 };
 

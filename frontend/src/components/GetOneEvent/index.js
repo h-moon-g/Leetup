@@ -6,6 +6,8 @@ import "./GetOneEvent.css";
 import { getOneGroup } from "../../store/oneGroup";
 import { getOneEvent } from "../../store/oneEvent";
 import { useDispatch, useSelector } from "react-redux";
+import OpenModalButton from "../OpenModalButton";
+import DeleteEventModal from "../DeleteEventModal";
 
 function Events() {
   const { id } = useParams();
@@ -16,6 +18,8 @@ function Events() {
   }, [dispatch, id]);
 
   const event = useSelector((state) => state.event);
+
+  const user = useSelector((state) => state.session.user);
 
   const groupId = event.Group?.id;
 
@@ -31,6 +35,20 @@ function Events() {
 
   if (!Object.values(group).length) {
     return null;
+  }
+
+  let button;
+  if (user.id === group.organizerId) {
+    button = (
+      <div>
+        <OpenModalButton
+          buttonText="Delete"
+          modalComponent={<DeleteEventModal />}
+        />
+      </div>
+    );
+  } else {
+    button = null;
   }
 
   let eventPreviewImage;
@@ -87,6 +105,7 @@ function Events() {
           <i class="fa-solid fa-map-pin"></i>
           <h3>{event.type}</h3>
         </div>
+        <div>{button}</div>
         <div>
           <h3>Details</h3>
           <h5>{event.description}</h5>
