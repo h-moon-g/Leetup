@@ -2,6 +2,7 @@ import { csrfFetch } from "./csrf";
 
 const LOAD = "oneEvent/LOAD";
 const SET_EVENT = "oneEvent/SET_EVENT";
+const SET_EVENT_IMG = "oneGroup/SET_EVENT-IMG";
 const REMOVE_EVENT = "session/REMOVE_EVENT";
 
 const load = (list) => ({
@@ -16,6 +17,13 @@ const setEvent = (event) => {
   };
 };
 
+const setEventImg = (img) => {
+  return {
+    type: SET_EVENT_IMG,
+    payload: img,
+  };
+};
+
 const removeEvent = () => {
   return {
     type: REMOVE_EVENT,
@@ -26,8 +34,8 @@ export const getOneEvent = (id) => async (dispatch) => {
   const response = await csrfFetch(`/api/events/${id}`);
 
   if (response.ok) {
-    const group = await response.json();
-    dispatch(load(group));
+    const event = await response.json();
+    dispatch(load(event));
   }
 };
 
@@ -50,7 +58,22 @@ export const createEvent = (event) => async (dispatch) => {
     }),
   });
   const data = await response.json();
-  dispatch(setEvent(data.group));
+  dispatch(setEvent(data.event));
+  return data;
+};
+
+export const createImg = (event) => async (dispatch) => {
+  let { id, url } = event;
+  let preview = true;
+  const response = await csrfFetch(`/api/events/${id}/images`, {
+    method: "POST",
+    body: JSON.stringify({
+      url,
+      preview,
+    }),
+  });
+  const data = await response.json();
+  dispatch(setEventImg(data.event));
   return data;
 };
 

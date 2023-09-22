@@ -18,7 +18,7 @@ module.exports = {
         },
         {
           groupId: 1,
-          url: "https://media.istockphoto.com/id/1322123064/photo/portrait-of-an-adorable-white-cat-in-sunglasses-and-an-shirt-lies-on-a-fabric-hammock.jpg?s=612x612&w=0&k=20&c=-G6l2c4jNI0y4cenh-t3qxvIQzVCOqOYZNvrRA7ZU5o=",
+          url: "https://upload.wikimedia.org/wikipedia/commons/d/dc/Young_cats.jpg",
           preview: false,
         },
         {
@@ -28,7 +28,12 @@ module.exports = {
         },
         {
           groupId: 3,
-          url: "https://images.unsplash.com/photo-1602418013963-c1f017b3bb63?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8YmVhdXRpZnVsJTIwY2F0fGVufDB8fDB8fHww&w=1000&q=80",
+          url: "https://hips.hearstapps.com/hmg-prod/images/cute-photos-of-cats-looking-at-camera-1593184780.jpg",
+          preview: true,
+        },
+        {
+          groupId: 4,
+          url: "https://cdn.pixabay.com/photo/2017/02/20/18/03/cat-2083492_1280.jpg",
           preview: true,
         },
       ],

@@ -19,15 +19,36 @@ const validateCreateGroup = [
   check("name")
     .isLength({ max: 60 })
     .withMessage("Name must be 60 characters or less"),
+  check("name").exists({ checkFalsy: true }).withMessage("Name is required"),
   check("about")
-    .isLength({ min: 50 })
-    .withMessage("About must be 50 characters or more"),
+    .isLength({ min: 30 })
+    .withMessage("Description must be at least 30 characters long"),
   check("type")
     .isIn(["Online", "In person"])
-    .withMessage("Type must be 'Online' or 'In person'"),
+    .withMessage("Group Type is required"),
   check("private").isBoolean().withMessage("Private must be a boolean"),
+  check("private")
+    .exists({ checkFalsy: true })
+    .withMessage("Visibility Type is required"),
   check("city").exists({ checkFalsy: true }).withMessage("City is required"),
   check("state").exists({ checkFalsy: true }).withMessage("State is required"),
+  handleValidationErrors,
+];
+
+const validateCreateGroupImg = [
+  check("url").custom(async (url) => {
+    if (!url) {
+      throw new Error("Image URL must end in .png, .jpg, or .jpeg");
+    }
+    if (
+      url &&
+      !url.endsWith(".png") &&
+      !url.endsWith(".jpg") &&
+      !url.endsWith(".jpeg")
+    ) {
+      throw new Error("Image URL must end in .png, .jpg, or .jpeg");
+    }
+  }),
   handleValidationErrors,
 ];
 
@@ -276,52 +297,57 @@ router.post("", requireAuth, validateCreateGroup, async (req, res) => {
 });
 
 //Add an image to a Group based on the Group's id
-router.post("/:groupId/images", requireAuth, async (req, res) => {
-  const group = await Group.findOne({
-    where: {
-      id: req.params.groupId,
-    },
-    include: {
-      model: GroupImage,
-    },
-  });
-  if (!group) {
-    res.status(404);
-    return res.json({
-      message: "Group couldn't be found",
+router.post(
+  "/:groupId/images",
+  requireAuth,
+  validateCreateGroupImg,
+  async (req, res) => {
+    const group = await Group.findOne({
+      where: {
+        id: req.params.groupId,
+      },
+      include: {
+        model: GroupImage,
+      },
     });
-  }
-  const organizerId = group.organizerId;
-  const user = await User.findByPk(req.user.id);
-  if (user.id !== organizerId) {
-    res.status(403);
-    return res.json({
-      message: "Forbidden",
-    });
-  } else {
-    const { url, preview } = req.body;
-    const newGroupImage = await GroupImage.create({
-      groupId: group.id,
-      url,
-      preview,
-    });
-    if (newGroupImage.preview === true) {
-      for (let i = 0; i < group.GroupImages.length; i++) {
-        let image = group.GroupImages[i];
-        if (image.id !== newGroupImage.id) {
-          await image.update({
-            preview: false,
-          });
+    if (!group) {
+      res.status(404);
+      return res.json({
+        message: "Group couldn't be found",
+      });
+    }
+    const organizerId = group.organizerId;
+    const user = await User.findByPk(req.user.id);
+    if (user.id !== organizerId) {
+      res.status(403);
+      return res.json({
+        message: "Forbidden",
+      });
+    } else {
+      const { url, preview } = req.body;
+      const newGroupImage = await GroupImage.create({
+        groupId: group.id,
+        url,
+        preview,
+      });
+      if (newGroupImage.preview === true) {
+        for (let i = 0; i < group.GroupImages.length; i++) {
+          let image = group.GroupImages[i];
+          if (image.id !== newGroupImage.id) {
+            await image.update({
+              preview: false,
+            });
+          }
         }
       }
+      return res.json({
+        id: newGroupImage.id,
+        url: newGroupImage.url,
+        preview: newGroupImage.preview,
+      });
     }
-    return res.json({
-      id: newGroupImage.id,
-      url: newGroupImage.url,
-      preview: newGroupImage.preview,
-    });
   }
-});
+);
 
 //Edit a group
 router.put("/:groupId", requireAuth, validateCreateGroup, async (req, res) => {

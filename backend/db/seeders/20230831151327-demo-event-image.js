@@ -26,6 +26,11 @@ module.exports = {
           url: "https://images.all-free-download.com/images/graphiclarge/cat_in_the_city_208264.jpg",
           preview: true,
         },
+        {
+          eventId: 4,
+          url: "https://cdn.pixabay.com/photo/2014/05/07/06/44/cat-339400_640.jpg",
+          preview: true,
+        },
       ],
       { validate: true }
     );

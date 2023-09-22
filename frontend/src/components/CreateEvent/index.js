@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Redirect, useHistory, useParams } from "react-router-dom";
 import { createEvent } from "../../store/oneEvent";
 import { getOneGroup } from "../../store/oneGroup";
+import { createImg } from "../../store/oneEvent";
 
 function CreateEvent() {
   const dispatch = useDispatch();
@@ -13,7 +14,9 @@ function CreateEvent() {
   const [description, setDescription] = useState("");
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
+  const [url, setUrl] = useState("");
   const [errors, setErrors] = useState({});
+  const [imgErrors, setImgErrors] = useState({});
 
   const history = useHistory();
 
@@ -28,6 +31,23 @@ function CreateEvent() {
   if (!Object.values(group).length) {
     return null;
   }
+
+  const validateImg = () => {
+    if (!url) {
+      setImgErrors({ url: "Image URL must end in .png, .jpg, or .jpeg" });
+      return false;
+    }
+    if (
+      url &&
+      !url.endsWith(".png") &&
+      !url.endsWith(".jpg") &&
+      !url.endsWith(".jpeg")
+    ) {
+      setImgErrors({ url: "Image URL must end in .png, .jpg, or .jpeg" });
+      return false;
+    }
+    return true;
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -49,7 +69,16 @@ function CreateEvent() {
         setErrors(data.errors);
       }
     });
-    if (createdEvent) {
+    const validated = validateImg();
+    if (createdEvent && validated) {
+      await dispatch(
+        createImg({
+          id: createdEvent.id,
+          url,
+        })
+      ).catch(async (res) => {
+        await res.json();
+      });
       history.push(`/events/${createdEvent.id}`);
     }
   };
@@ -106,6 +135,17 @@ function CreateEvent() {
           onChange={(e) => setEndDate(e.target.value)}
         />
         {errors.endDate && <p>{errors.endDate}</p>}
+        <label htmlFor="url">
+          Please add an image url for your event below:
+        </label>
+        <input
+          placeholder="Image Url"
+          type="text"
+          name="url"
+          value={url}
+          onChange={(e) => setUrl(e.target.value)}
+        />
+        {imgErrors.url && <p>{imgErrors.url}</p>}
         <label htmlFor="description">
           Now describe what your group will be description
         </label>

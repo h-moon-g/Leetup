@@ -20,20 +20,29 @@ const validateEvent = [
       throw new Error("Venue does not exist");
     }
   }),
-  check("name")
-    .isLength({ min: 5 })
-    .withMessage("Name must be at least 5 characters"),
+  check("name").isLength({ min: 5 }).withMessage("Name is required"),
+  check("name").exists({ checkFalsy: true }).withMessage("Name is required"),
   check("type")
     .isIn(["Online", "In person"])
-    .withMessage("Type must be 'Online' or 'In person'"),
+    .withMessage("Event Type is required"),
   check("capacity").isInt().withMessage("Capacity must be an integer"),
+  check("price").exists({ checkFalsy: true }).withMessage("Price is required"),
   check("price").isDecimal().withMessage("Price is invalid"),
   check("description")
     .exists({ checkFalsy: true })
     .withMessage("Description is required"),
+  check("description")
+    .isLength({ min: 30 })
+    .withMessage("Description must be at least 30 characters long"),
+  check("startDate")
+    .exists({ checkFalsy: true })
+    .withMessage("Event start is required"),
   check("startDate")
     .isAfter(Date(Date.now()))
     .withMessage("Start date must be in the future"),
+  check("endDate")
+    .exists({ checkFalsy: true })
+    .withMessage("Event end is required"),
   check("endDate").custom(async (endDate, { req }) => {
     let startDate = req.body.startDate;
     if (endDate < startDate) {

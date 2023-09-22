@@ -14,8 +14,26 @@ function CreateGroup() {
   const [state, setState] = useState("");
   const [url, setUrl] = useState("");
   const [errors, setErrors] = useState({});
+  const [imgErrors, setImgErrors] = useState({});
 
   const history = useHistory();
+
+  const validateImg = () => {
+    if (!url) {
+      setImgErrors({ url: "Image URL must end in .png, .jpg, or .jpeg" });
+      return false;
+    }
+    if (
+      url &&
+      !url.endsWith(".png") &&
+      !url.endsWith(".jpg") &&
+      !url.endsWith(".jpeg")
+    ) {
+      setImgErrors({ url: "Image URL must end in .png, .jpg, or .jpeg" });
+      return false;
+    }
+    return true;
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -35,17 +53,15 @@ function CreateGroup() {
         setErrors(data.errors);
       }
     });
-    if (createdGroup) {
+    const validated = validateImg();
+    if (createdGroup && validated) {
       await dispatch(
         createImg({
           id: createdGroup.id,
           url,
         })
       ).catch(async (res) => {
-        const data = await res.json();
-        if (data && data.errors) {
-          setErrors(data.errors);
-        }
+        await res.json();
       });
       history.push(`/groups/${createdGroup.id}`);
     }
@@ -131,11 +147,11 @@ function CreateGroup() {
           value={privacy}
           onChange={(e) => setPrivacy(e.target.value)}
         >
-          <option value="">select one</option>
+          <option>select one</option>
           <option value="true">Private</option>
           <option value="false">Public</option>
         </select>
-        {errors.privacy && <p>{errors.privacy}</p>}
+        {errors.private && <p>{errors.private}</p>}
         <label htmlFor="url">
           Please add an image url for your group below:
         </label>
@@ -146,7 +162,7 @@ function CreateGroup() {
           value={url}
           onChange={(e) => setUrl(e.target.value)}
         />
-        {errors.url && <p>{errors.url}</p>}
+        {imgErrors.url && <p>{imgErrors.url}</p>}
         <button type="submit">Create group</button>
       </form>
     </>

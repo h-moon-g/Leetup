@@ -55,7 +55,7 @@ export const createGroup = (group) => async (dispatch) => {
   let { name, about, type, privacy, city, state } = group;
   if (privacy === "true") {
     privacy = true;
-  } else {
+  } else if (privacy === "false") {
     privacy = false;
   }
   const response = await csrfFetch("/api/groups", {
@@ -70,7 +70,7 @@ export const createGroup = (group) => async (dispatch) => {
     }),
   });
   const data = await response.json();
-  dispatch(setGroupImg(data.group));
+  dispatch(setGroup(data.group));
   return data;
 };
 
@@ -85,7 +85,7 @@ export const createImg = (group) => async (dispatch) => {
     }),
   });
   const data = await response.json();
-  dispatch(setGroup(data.group));
+  dispatch(setGroupImg(data.group));
   return data;
 };
 
