@@ -134,7 +134,7 @@ function UpdateGroup() {
           <option value="true">Private</option>
           <option value="false">Public</option>
         </select>
-        {errors.privacy && <p>{errors.privacy}</p>}
+        {errors.private && <p>{errors.private}</p>}
         <button type="submit">Create group</button>
       </form>
     </>

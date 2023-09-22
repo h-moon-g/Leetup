@@ -56,7 +56,7 @@ export const createGroup = (group) => async (dispatch) => {
   if (privacy === "true") {
     privacy = true;
   } else if (privacy === "false") {
-    privacy = false;
+    privacy = "false";
   }
   const response = await csrfFetch("/api/groups", {
     method: "POST",
@@ -93,8 +93,8 @@ export const updateGroup = (group) => async (dispatch) => {
   let { id, name, about, type, privacy, city, state } = group;
   if (privacy === "true") {
     privacy = true;
-  } else {
-    privacy = false;
+  } else if (privacy === "false") {
+    privacy = "false";
   }
   const response = await csrfFetch(`/api/groups/${id}`, {
     method: "PUT",
