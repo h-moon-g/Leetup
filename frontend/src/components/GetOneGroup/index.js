@@ -6,6 +6,8 @@ import "./GetOneGroup.css";
 import { getOneGroup } from "../../store/oneGroup";
 import { getEvents } from "../../store/events";
 import { useDispatch, useSelector } from "react-redux";
+import OpenModalButton from "../OpenModalButton";
+import DeleteGroupModal from "../DeleteGroupModal";
 
 function Groups() {
   const { id } = useParams();
@@ -49,7 +51,10 @@ function Groups() {
       <div>
         <button onClick={createGroupButton}>Create event</button>
         <button onClick={updateButton}>Update</button>
-        <button>Delete</button>
+        <OpenModalButton
+          buttonText="Delete"
+          modalComponent={<DeleteGroupModal />}
+        />
       </div>
     );
   } else {

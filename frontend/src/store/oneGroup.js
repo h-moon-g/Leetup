@@ -3,6 +3,7 @@ import { csrfFetch } from "./csrf";
 const LOAD = "oneGroup/LOAD";
 const SET_GROUP = "oneGroup/SET_GROUP";
 const CHANGE_GROUP = "oneGroup/UPDATE_GROUP";
+const REMOVE_GROUP = "session/REMOVE_GROUP";
 
 const load = (list) => ({
   type: LOAD,
@@ -20,6 +21,12 @@ const changeGroup = (group) => {
   return {
     type: CHANGE_GROUP,
     payload: group,
+  };
+};
+
+const removeGroup = () => {
+  return {
+    type: REMOVE_GROUP,
   };
 };
 
@@ -79,6 +86,14 @@ export const updateGroup = (group) => async (dispatch) => {
   });
   const data = await response.json();
   dispatch(changeGroup(data.group));
+  return response;
+};
+
+export const deleteGroup = (id) => async (dispatch) => {
+  const response = await csrfFetch(`/api/groups/${id}`, {
+    method: "DELETE",
+  });
+  dispatch(removeGroup());
   return response;
 };
 
