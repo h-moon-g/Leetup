@@ -29,6 +29,11 @@ function Groups() {
 
   let history = useHistory();
 
+  let createGroupButton = (e) => {
+    e.preventDefault();
+    history.push(`/groups/${group.id}/events/new`);
+  };
+
   let updateButton = (e) => {
     e.preventDefault();
     history.push(`/groups/${group.id}/edit`);
@@ -42,7 +47,7 @@ function Groups() {
   if (user.id === group.organizerId) {
     button = (
       <div>
-        <button>Create event</button>
+        <button onClick={createGroupButton}>Create event</button>
         <button onClick={updateButton}>Update</button>
         <button>Delete</button>
       </div>

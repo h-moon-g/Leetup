@@ -1,11 +1,19 @@
 import { csrfFetch } from "./csrf";
 
 const LOAD = "oneEvent/LOAD";
+const SET_EVENT = "oneEvent/SET_EVENT";
 
 const load = (list) => ({
   type: LOAD,
   list,
 });
+
+const setEvent = (event) => {
+  return {
+    type: SET_EVENT,
+    payload: event,
+  };
+};
 
 export const getOneEvent = (id) => async (dispatch) => {
   const response = await csrfFetch(`/api/events/${id}`);
@@ -14,6 +22,29 @@ export const getOneEvent = (id) => async (dispatch) => {
     const group = await response.json();
     dispatch(load(group));
   }
+};
+
+export const createEvent = (event) => async (dispatch) => {
+  let { id, name, type, price, description, startDate, endDate } = event;
+  let capacity = 10;
+  let venueId = 1;
+  price = parseInt(price);
+  const response = await csrfFetch(`/api/groups/${id}/events`, {
+    method: "POST",
+    body: JSON.stringify({
+      name,
+      type,
+      capacity,
+      price,
+      description,
+      startDate,
+      endDate,
+      venueId,
+    }),
+  });
+  const data = await response.json();
+  dispatch(setEvent(data.group));
+  return response;
 };
 
 const initialState = {};
