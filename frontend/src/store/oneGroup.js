@@ -2,6 +2,7 @@ import { csrfFetch } from "./csrf";
 
 const LOAD = "oneGroup/LOAD";
 const SET_GROUP = "oneGroup/SET_GROUP";
+const SET_GROUP_IMG = "oneGroup/SET_GROUP-IMG";
 const CHANGE_GROUP = "oneGroup/UPDATE_GROUP";
 const REMOVE_GROUP = "session/REMOVE_GROUP";
 
@@ -14,6 +15,13 @@ const setGroup = (group) => {
   return {
     type: SET_GROUP,
     payload: group,
+  };
+};
+
+const setGroupImg = (img) => {
+  return {
+    type: SET_GROUP_IMG,
+    payload: img,
   };
 };
 
@@ -59,6 +67,21 @@ export const createGroup = (group) => async (dispatch) => {
       private: privacy,
       city,
       state,
+    }),
+  });
+  const data = await response.json();
+  dispatch(setGroupImg(data.group));
+  return data;
+};
+
+export const createImg = (group) => async (dispatch) => {
+  let { id, url } = group;
+  let preview = true;
+  const response = await csrfFetch(`/api/groups/${id}/images`, {
+    method: "POST",
+    body: JSON.stringify({
+      url,
+      preview,
     }),
   });
   const data = await response.json();

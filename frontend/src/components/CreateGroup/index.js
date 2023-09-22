@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Redirect, useHistory } from "react-router-dom";
 import { createGroup } from "../../store/oneGroup";
+import { createImg } from "../../store/oneGroup";
 
 function CreateGroup() {
   const dispatch = useDispatch();
@@ -11,6 +12,7 @@ function CreateGroup() {
   const [privacy, setPrivacy] = useState("");
   const [city, setCity] = useState("");
   const [state, setState] = useState("");
+  const [url, setUrl] = useState("");
   const [errors, setErrors] = useState({});
 
   const history = useHistory();
@@ -34,6 +36,17 @@ function CreateGroup() {
       }
     });
     if (createdGroup) {
+      await dispatch(
+        createImg({
+          id: createdGroup.id,
+          url,
+        })
+      ).catch(async (res) => {
+        const data = await res.json();
+        if (data && data.errors) {
+          setErrors(data.errors);
+        }
+      });
       history.push(`/groups/${createdGroup.id}`);
     }
   };
@@ -123,6 +136,17 @@ function CreateGroup() {
           <option value="false">Public</option>
         </select>
         {errors.privacy && <p>{errors.privacy}</p>}
+        <label htmlFor="url">
+          Please add an image url for your group below:
+        </label>
+        <input
+          placeholder="Image Url"
+          type="text"
+          name="url"
+          value={url}
+          onChange={(e) => setUrl(e.target.value)}
+        />
+        {errors.url && <p>{errors.url}</p>}
         <button type="submit">Create group</button>
       </form>
     </>
