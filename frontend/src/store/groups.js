@@ -13,6 +13,7 @@ export const getGroups = () => async (dispatch) => {
   if (response.ok) {
     const list = await response.json();
     dispatch(load(list));
+    return list;
   }
 };
 
