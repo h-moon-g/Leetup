@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useModal } from "../../context/Modal";
+import { Redirect, useHistory, useParams } from "react-router-dom";
 import "./DeleteEventModal.css";
 import { deleteEvent } from "../../store/oneEvent";
 
@@ -8,13 +9,18 @@ function DeleteEventModal() {
   const dispatch = useDispatch();
   const { closeModal } = useModal();
 
+  const history = useHistory();
+
   const event = useSelector((state) => state.event);
 
   const id = event.id;
 
+  const group = useSelector((state) => state.event);
+
   const handleDelete = (e) => {
     e.preventDefault();
-    return dispatch(deleteEvent(id)).then(closeModal);
+    dispatch(deleteEvent(id)).then(closeModal());
+    history.push(`/groups/${group.id}`);
   };
 
   return (

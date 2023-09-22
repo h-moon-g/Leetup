@@ -10,13 +10,16 @@ function DeleteGroupModal() {
   const dispatch = useDispatch();
   const { closeModal } = useModal();
 
+  const history = useHistory();
+
   const group = useSelector((state) => state.group);
 
   const id = group.id;
 
   const handleDelete = (e) => {
     e.preventDefault();
-    return dispatch(deleteGroup(id)).then(closeModal);
+    dispatch(deleteGroup(id)).then(closeModal);
+    history.push("/groups");
   };
 
   return (
