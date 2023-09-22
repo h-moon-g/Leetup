@@ -19,6 +19,8 @@ function Groups() {
     dispatch(getEvents());
   }, [dispatch]);
 
+  const user = useSelector((state) => state.session.user);
+
   const group = useSelector((state) => state.group);
 
   const events = useSelector((state) => {
@@ -27,6 +29,22 @@ function Groups() {
 
   if (!Object.values(group).length) {
     return null;
+  }
+  let button;
+  if (user.id === group.organizerId) {
+    button = (
+      <div>
+        <button>Create event</button>
+        <button>Update</button>
+        <button>Delete</button>
+      </div>
+    );
+  } else {
+    button = (
+      <div>
+        <button>Join this group</button>
+      </div>
+    );
   }
 
   let previewImage;
@@ -127,7 +145,7 @@ function Groups() {
         <h3>
           Organized by {group.Organizer.firstName} {group.Organizer.lastName}
         </h3>
-        <button>Join this group</button>
+        <div>{button}</div>
       </div>
       <div>
         <h4>Organizer</h4>
