@@ -29,10 +29,10 @@ function CreateEvent() {
     return null;
   }
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setErrors({});
-    dispatch(
+    const createdEvent = await dispatch(
       createEvent({
         id,
         name,
@@ -49,6 +49,9 @@ function CreateEvent() {
         setErrors(data.errors);
       }
     });
+    if (createdEvent) {
+      history.push(`/events/${createdEvent.id}`);
+    }
   };
   return (
     <>

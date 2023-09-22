@@ -15,7 +15,7 @@ function DeleteEventModal() {
 
   const id = event.id;
 
-  const group = useSelector((state) => state.event);
+  const group = useSelector((state) => state.group);
 
   const handleDelete = (e) => {
     e.preventDefault();

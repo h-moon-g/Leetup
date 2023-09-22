@@ -63,7 +63,7 @@ export const createGroup = (group) => async (dispatch) => {
   });
   const data = await response.json();
   dispatch(setGroup(data.group));
-  return response;
+  return data;
 };
 
 export const updateGroup = (group) => async (dispatch) => {
@@ -86,7 +86,7 @@ export const updateGroup = (group) => async (dispatch) => {
   });
   const data = await response.json();
   dispatch(changeGroup(data.group));
-  return response;
+  return data;
 };
 
 export const deleteGroup = (id) => async (dispatch) => {

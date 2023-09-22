@@ -51,7 +51,7 @@ export const createEvent = (event) => async (dispatch) => {
   });
   const data = await response.json();
   dispatch(setEvent(data.group));
-  return response;
+  return data;
 };
 
 export const deleteEvent = (id) => async (dispatch) => {

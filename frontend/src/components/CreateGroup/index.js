@@ -15,10 +15,10 @@ function CreateGroup() {
 
   const history = useHistory();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setErrors({});
-    let createdGroup = dispatch(
+    let createdGroup = await dispatch(
       createGroup({
         name,
         about,
@@ -33,7 +33,7 @@ function CreateGroup() {
         setErrors(data.errors);
       }
     });
-    if (createdGroup.id !== undefined) {
+    if (createdGroup) {
       history.push(`/groups/${createdGroup.id}`);
     }
   };

@@ -5,30 +5,31 @@ import { updateGroup, getOneGroup } from "../../store/oneGroup";
 
 function UpdateGroup() {
   const dispatch = useDispatch();
-  const [name, setName] = useState("");
-  const [about, setAbout] = useState("");
-  const [type, setType] = useState("");
-  const [privacy, setPrivacy] = useState("");
-  const [city, setCity] = useState("");
-  const [state, setState] = useState("");
-  const [errors, setErrors] = useState({});
 
   const { id } = useParams();
-
   useEffect(() => {
     dispatch(getOneGroup(id));
   }, [dispatch, id]);
 
   const group = useSelector((state) => state.group);
+  const [name, setName] = useState(group.name);
+  const [about, setAbout] = useState(group.about);
+  const [type, setType] = useState(group.type);
+  const [privacy, setPrivacy] = useState(group.private);
+  const [city, setCity] = useState(group.city);
+  const [state, setState] = useState(group.state);
+  const [errors, setErrors] = useState({});
+
+  let history = useHistory();
 
   if (!Object.values(group).length) {
     return null;
   }
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setErrors({});
-    dispatch(
+    const updatedGroup = await dispatch(
       updateGroup({
         id,
         name,
@@ -44,6 +45,9 @@ function UpdateGroup() {
         setErrors(data.errors);
       }
     });
+    if (updatedGroup) {
+      history.push(`/groups/${updatedGroup.id}`);
+    }
   };
 
   return (
