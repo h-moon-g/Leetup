@@ -68,7 +68,7 @@ function LoginFormModal() {
           {errors.credential && <p>{errors.credential}</p>}
           {loginButton}
           <button onClick={handleDemoUser} id="demouser-button">
-            Demo User
+            Log in as Demo User
           </button>
         </form>
       </div>
