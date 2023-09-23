@@ -13,9 +13,11 @@ function Navigation({ isLoaded }) {
   let sessionLinks;
   if (sessionUser) {
     sessionLinks = (
-      <div>
+      <div id="logged-in-div">
+        <NavLink to="/groups/new" id="sang-nav-bar-link">
+          Start a new group
+        </NavLink>
         <ProfileButton user={sessionUser} />
-        <NavLink to="/groups/new">Start a new group</NavLink>
       </div>
     );
   } else {

@@ -90,6 +90,7 @@
 }
 
 #e-id-time > i {
+  color: lightgray;
   align-items: center;
   height: fit-content;
   font-size: 24px;
@@ -167,6 +168,7 @@
 }
 
 #e-id-price > i {
+  color: lightgray;
   align-items: center;
   height: fit-content;
   font-size: 24px;
@@ -181,6 +183,7 @@
 }
 
 #e-id-place > i {
+  color: lightgray;
   align-items: center;
   height: fit-content;
   font-size: 24px;

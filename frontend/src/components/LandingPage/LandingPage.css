@@ -126,3 +126,7 @@
 #lp-button > button:hover {
   cursor: pointer;
 }
+
+.lp-p-filler {
+  margin-left: 0;
+}

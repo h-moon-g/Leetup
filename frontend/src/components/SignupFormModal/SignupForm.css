@@ -1,3 +1,47 @@
 p {
   color: red;
+  margin-left: 10%;
+}
+
+#modal-content {
+  width: 60%;
+  border-radius: 10%;
+}
+
+#su-form-div {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 80%;
+}
+
+#su-form > input {
+  width: 80%;
+  margin-left: 10%;
+  margin-bottom: 10px;
+}
+
+#su-form > input:focus {
+  background-color: rgb(203, 234, 251);
+}
+
+#signup-disabled-button {
+  width: 82%;
+  margin-left: 10%;
+  margin-bottom: 20px;
+  padding: 10px 0;
+}
+
+#signup-button {
+  width: 82%;
+  margin-left: 10%;
+  margin-bottom: 20px;
+  padding: 10px 0;
+  background-color: indianred;
+  color: white;
+}
+
+#signup-button:hover {
+  cursor: pointer;
 }
