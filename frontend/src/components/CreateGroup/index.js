@@ -146,6 +146,7 @@ function CreateGroup() {
             </h5>
             <div id="cg-about-input">
               <textarea
+                cols={40}
                 placeholder="Please write at least 30 characters"
                 type="textarea"
                 name="about"
