@@ -143,7 +143,7 @@ function Events() {
           </div>
         </div>
         <div id="e-id-details-div">
-          <h2>Details</h2>
+          <h2>Description</h2>
           <h4>{event.description}</h4>
           <h4>
             Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
