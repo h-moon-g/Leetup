@@ -16,10 +16,11 @@ function DeleteGroupModal() {
 
   const id = group.id;
 
-  const handleDelete = (e) => {
+  const handleDelete = async (e) => {
     e.preventDefault();
-    dispatch(deleteGroup(id)).then(closeModal);
-    history.push("/groups");
+    await dispatch(deleteGroup(id))
+      .then(closeModal)
+      .then(history.push("/groups"));
   };
 
   return (

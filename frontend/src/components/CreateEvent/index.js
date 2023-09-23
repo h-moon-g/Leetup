@@ -81,7 +81,9 @@ function CreateEvent() {
       });
       history.push(`/events/${createdEvent.id}`);
     } else {
-      dispatch(deleteEvent(createdEvent.id));
+      if (createdEvent) {
+        dispatch(deleteEvent(createdEvent.id));
+      }
     }
   };
   return (

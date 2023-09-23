@@ -65,7 +65,9 @@ function CreateGroup() {
       });
       history.push(`/groups/${createdGroup.id}`);
     } else {
-      dispatch(deleteGroup(createdGroup.id));
+      if (createdGroup) {
+        dispatch(deleteGroup(createdGroup.id));
+      }
     }
   };
 
