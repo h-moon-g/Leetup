@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Redirect, useHistory } from "react-router-dom";
-import { createGroup } from "../../store/oneGroup";
+import { createGroup, deleteGroup } from "../../store/oneGroup";
 import { createImg } from "../../store/oneGroup";
 
 function CreateGroup() {
@@ -64,6 +64,8 @@ function CreateGroup() {
         await res.json();
       });
       history.push(`/groups/${createdGroup.id}`);
+    } else {
+      dispatch(deleteGroup(createdGroup.id));
     }
   };
 

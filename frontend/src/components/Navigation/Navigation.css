@@ -1,5 +1,45 @@
-p {
-  color: red;
+body {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+#nav-div {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  height: 60px;
+  border-bottom: 1px solid lightgrey;
+}
+
+#li-su-buttons {
+  display: flex;
+  align-items: right;
+  justify-content: right;
+  margin-left: 65%;
+  width: 100%;
+}
+
+#li-su-buttons > button {
+  display: flex;
+  align-items: right;
+  margin-right: 20px;
+  background-color: white;
+  border: none;
+  font-weight: bold;
+}
+
+#li-su-buttons > button:hover {
+  color: indianred;
+  cursor: pointer;
+}
+
+#leetup-link {
+  margin-left: 20px;
+  text-decoration: none;
+  color: indianred;
+  font-size: 35px;
+  font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
 }
 
 .hidden {

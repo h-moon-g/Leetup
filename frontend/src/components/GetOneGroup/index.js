@@ -45,24 +45,32 @@ function Groups() {
     return null;
   }
 
+  let comingSoonAlert = () => {
+    alert("Feature coming soon...");
+  };
+
   let button;
-  if (user.id === group.organizerId) {
-    button = (
-      <div>
-        <button onClick={createGroupButton}>Create event</button>
-        <button onClick={updateButton}>Update</button>
-        <OpenModalButton
-          buttonText="Delete"
-          modalComponent={<DeleteGroupModal />}
-        />
-      </div>
-    );
+  if (user) {
+    if (user.id === group.organizerId) {
+      button = (
+        <div>
+          <button onClick={createGroupButton}>Create event</button>
+          <button onClick={updateButton}>Update</button>
+          <OpenModalButton
+            buttonText="Delete"
+            modalComponent={<DeleteGroupModal />}
+          />
+        </div>
+      );
+    } else {
+      button = (
+        <div>
+          <button onClick={comingSoonAlert}>Join this group</button>
+        </div>
+      );
+    }
   } else {
-    button = (
-      <div>
-        <button>Join this group</button>
-      </div>
-    );
+    button = null;
   }
 
   let previewImage;
@@ -95,12 +103,15 @@ function Groups() {
       futureEvents.push(event);
     }
   });
+  futureEvents.sort((a, b) => {
+    return new Date(a.startDate) - new Date(b.startDate);
+  });
   let pastContent = null;
   let futureContent = null;
   if (pastEvents.length !== 0) {
     pastContent = (
       <div>
-        <h2>Past Events {pastEvents.length}</h2>
+        <h2>Past Events ({pastEvents.length})</h2>
         {pastEvents.map((event) => {
           return (
             <NavLink to={`/events/${event.id}`}>
@@ -127,7 +138,7 @@ function Groups() {
   if (futureEvents.length !== 0) {
     futureContent = (
       <div>
-        <h2>Upcoming Events {futureEvents.length}</h2>
+        <h2>Upcoming Events ({futureEvents.length})</h2>
         {futureEvents.map((event) => {
           return (
             <NavLink to={`/events/${event.id}`}>
@@ -182,6 +193,7 @@ function Groups() {
           culpa qui officia deserunt mollit anim id est laborum.
         </h5>
       </div>
+      <div>Events({futureEvents.length + pastEvents.length})</div>
       <div>{futureContent}</div>
       <div>{pastContent}</div>
     </>

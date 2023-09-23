@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Redirect, useHistory, useParams } from "react-router-dom";
-import { createEvent } from "../../store/oneEvent";
+import { createEvent, deleteEvent } from "../../store/oneEvent";
 import { getOneGroup } from "../../store/oneGroup";
 import { createImg } from "../../store/oneEvent";
 
@@ -80,6 +80,8 @@ function CreateEvent() {
         await res.json();
       });
       history.push(`/events/${createdEvent.id}`);
+    } else {
+      dispatch(deleteEvent(createdEvent.id));
     }
   };
   return (

@@ -19,8 +19,6 @@ function Events() {
 
   const event = useSelector((state) => state.event);
 
-  const user = useSelector((state) => state.session.user);
-
   const groupId = event.Group?.id;
 
   useEffect(() => {
@@ -28,6 +26,8 @@ function Events() {
   }, [dispatch, groupId]);
 
   const group = useSelector((state) => state.group);
+
+  const user = useSelector((state) => state.session.user);
 
   if (!Object.values(event).length) {
     return null;
@@ -38,15 +38,19 @@ function Events() {
   }
 
   let button;
-  if (user.id === group.organizerId) {
-    button = (
-      <div>
-        <OpenModalButton
-          buttonText="Delete"
-          modalComponent={<DeleteEventModal />}
-        />
-      </div>
-    );
+  if (user) {
+    if (user.id === group.organizerId) {
+      button = (
+        <div>
+          <OpenModalButton
+            buttonText="Delete"
+            modalComponent={<DeleteEventModal />}
+          />
+        </div>
+      );
+    } else {
+      button = null;
+    }
   } else {
     button = null;
   }
