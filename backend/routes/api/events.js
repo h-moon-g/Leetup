@@ -20,7 +20,7 @@ const validateEvent = [
       throw new Error("Venue does not exist");
     }
   }),
-  check("name").isLength({ min: 5 }).withMessage("Name is required"),
+  check("name").isLength({ min: 5 }).withMessage("Name must be 5 or more characters"),
   check("name").exists({ checkFalsy: true }).withMessage("Name is required"),
   check("type")
     .isIn(["Online", "In person"])

@@ -216,7 +216,7 @@ function Groups() {
               {groupEvents.length} events · {groupPrivacy}
             </h4>
             <h4>
-              Organized by {group.Organizer.firstName}{" "}
+              Organized by: {group.Organizer.firstName}{" "}
               {group.Organizer.lastName}
             </h4>
             <div>{button}</div>

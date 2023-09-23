@@ -76,7 +76,7 @@ function CreateGroup() {
     <>
       <div id="cg-div">
         <div id="cg-header-div">
-          <h3 id="cg-header">BECOME AN ORGANIZER</h3>
+          <h3 id="cg-header">START A NEW GROUP</h3>
           <h3>
             We'll walk you through a few steps to build your local community
           </h3>

@@ -97,7 +97,7 @@ function Events() {
         </div>
         <h2>{event.name}</h2>
         <h3>
-          Hosted by {group.Organizer.firstName} {group.Organizer.lastName}
+          Hosted by: {group.Organizer.firstName} {group.Organizer.lastName}
         </h3>
       </div>
       <div id="e-id-bottom-div">
