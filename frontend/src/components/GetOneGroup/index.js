@@ -53,7 +53,7 @@ function Groups() {
   if (user) {
     if (user.id === group.organizerId) {
       button = (
-        <div>
+        <div id="action-buttons-div">
           <button onClick={createGroupButton}>Create event</button>
           <button onClick={updateButton}>Update</button>
           <OpenModalButton

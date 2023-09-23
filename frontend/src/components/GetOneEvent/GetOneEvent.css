@@ -196,3 +196,18 @@
   color: lightgray;
   margin-left: 15px;
 }
+
+#e-id-delete-button-div > button {
+  background-color: indianred;
+  color: white;
+  padding: 5px 10px;
+  font-size: 14px;
+  margin-right: 10px;
+  white-space: nowrap;
+  margin-left: 60px;
+  margin-top: 15px;
+}
+
+#e-id-delete-button-div > button {
+  cursor: pointer;
+}

@@ -16,9 +16,9 @@ function ProfileButton({ user }) {
 
   let arrow;
   if (showMenu) {
-    arrow = <i class="fa-solid fa-angle-up"></i>;
+    arrow = <i className="fa-solid fa-angle-up"></i>;
   } else {
-    arrow = <i class="fa-solid fa-angle-down"></i>;
+    arrow = <i className="fa-solid fa-angle-down"></i>;
   }
 
   useEffect(() => {

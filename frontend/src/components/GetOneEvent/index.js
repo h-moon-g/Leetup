@@ -41,7 +41,7 @@ function Events() {
   if (user) {
     if (user.id === group.organizerId) {
       button = (
-        <div>
+        <div id="e-id-delete-button-div">
           <OpenModalButton
             buttonText="Delete"
             modalComponent={<DeleteEventModal />}
@@ -137,8 +137,8 @@ function Events() {
               <div id="e-id-place">
                 <i className="fa-solid fa-map-pin"></i>
                 <h3>{event.type}</h3>
+                <div>{button}</div>
               </div>
-              <div>{button}</div>
             </div>
           </div>
         </div>

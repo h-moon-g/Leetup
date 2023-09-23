@@ -130,3 +130,13 @@
 .lp-p-filler {
   margin-left: 0;
 }
+
+#sangLinkGo {
+  text-decoration: underline white 1px;
+  font-size: 21px;
+  color: cornflowerblue;
+}
+
+#sangLinkGo:hover {
+  text-decoration: underline;
+}

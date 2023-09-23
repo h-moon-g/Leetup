@@ -60,6 +60,27 @@
   box-shadow: 5px 5px 5px black;
 }
 
+#action-buttons-div {
+  display: flex;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  margin-bottom: 5px;
+}
+
+#action-buttons-div > button {
+  background-color: indianred;
+  color: white;
+  padding: 5px 10px;
+  font-size: 14px;
+  margin-right: 10px;
+  white-space: nowrap;
+}
+
+#action-buttons-div > button:hover {
+  cursor: pointer;
+}
+
 #jtg-div > button:hover {
   cursor: pointer;
 }
@@ -226,5 +247,5 @@
 }
 
 #nue-div {
-  padding-bottom: 74px;
+  padding-bottom: 140px;
 }
