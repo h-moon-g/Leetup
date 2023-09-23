@@ -113,3 +113,7 @@
   box-shadow: 5px 5px 5px black;
   margin-top: 18.72px;
 }
+
+#ce-button > button:hover {
+  cursor: pointer;
+}
