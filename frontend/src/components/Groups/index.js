@@ -52,16 +52,18 @@ function Groups() {
             groupPrivacy = "Private";
           }
           return (
-            <div>
-              <h3>{group.name}</h3>
-              <img src={group.previewImage} alt="leetup Img"></img>
-              <ul>
-                <li>{group.about}</li>
-                <li>{location}</li>
-                <li>{groupPrivacy}</li>
-                <li>{numEvents}</li>
-              </ul>
-            </div>
+            <NavLink to={`/groups/${group.id}`}>
+              <div>
+                <h3>{group.name}</h3>
+                <img src={group.previewImage} alt="leetup Img"></img>
+                <ul>
+                  <li>{group.about}</li>
+                  <li>{location}</li>
+                  <li>{groupPrivacy}</li>
+                  <li>{numEvents}</li>
+                </ul>
+              </div>
+            </NavLink>
           );
         })}
       </div>

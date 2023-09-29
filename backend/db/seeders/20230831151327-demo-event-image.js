@@ -13,17 +13,22 @@ module.exports = {
       [
         {
           eventId: 1,
-          url: "https://www.google.com/url?sa=i&url=https%3A%2F%2Funsplash.com%2Fimages%2Fanimals%2Fcat&psig=AOvVaw0ZLTg1nn1JXgSbdEOfcca1&ust=1693956572607000&source=images&cd=vfe&opi=89978449&ved=0CA8QjRxqFwoTCOiI8ZCOkoEDFQAAAAAdAAAAABAV",
+          url: "https://upload.wikimedia.org/wikipedia/commons/thumb/2/29/Cat_Sphynx._Kittens._img_11.jpg/1280px-Cat_Sphynx._Kittens._img_11.jpg",
           preview: true,
         },
         {
           eventId: 2,
-          url: "https://www.google.com/url?sa=i&url=https%3A%2F%2Funsplash.com%2Fs%2Fphotos%2Fdomestic-cat&psig=AOvVaw0ZLTg1nn1JXgSbdEOfcca1&ust=1693956572607000&source=images&cd=vfe&opi=89978449&ved=0CA8QjRxqFwoTCOiI8ZCOkoEDFQAAAAAdAAAAABAa",
+          url: "https://img.freepik.com/free-photo/beautiful-shot-white-british-shorthair-kitten_181624-57681.jpg",
           preview: true,
         },
         {
           eventId: 3,
-          url: "https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.shutterstock.com%2Fsearch%2Fblack-cat&psig=AOvVaw0ZLTg1nn1JXgSbdEOfcca1&ust=1693956572607000&source=images&cd=vfe&opi=89978449&ved=0CA8QjRxqFwoTCOiI8ZCOkoEDFQAAAAAdAAAAABAg",
+          url: "https://images.all-free-download.com/images/graphiclarge/cat_in_the_city_208264.jpg",
+          preview: true,
+        },
+        {
+          eventId: 4,
+          url: "https://cdn.pixabay.com/photo/2014/05/07/06/44/cat-339400_640.jpg",
           preview: true,
         },
       ],
@@ -33,8 +38,6 @@ module.exports = {
 
   async down(queryInterface, Sequelize) {
     options.tableName = "EventImages";
-    return queryInterface.bulkDelete(
-      options
-    );
+    return queryInterface.bulkDelete(options);
   },
 };

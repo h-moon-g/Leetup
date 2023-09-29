@@ -1,3 +1,5 @@
+import { csrfFetch } from "./csrf";
+
 const LOAD = "groups/LOAD";
 
 const load = (list) => ({
@@ -6,7 +8,7 @@ const load = (list) => ({
 });
 
 export const getGroups = () => async (dispatch) => {
-  const response = await fetch(`/api/groups`);
+  const response = await csrfFetch(`/api/groups`);
 
   if (response.ok) {
     const list = await response.json();
@@ -32,8 +34,8 @@ const groupsReducer = (state = initialState, action) => {
         allGroups[group.id] = group;
       });
       return {
-        ...allGroups,
         ...state,
+        ...allGroups,
         list: sortList(action.list),
       };
     default:

@@ -1,3 +1,5 @@
+import { csrfFetch } from "./csrf";
+
 const LOAD = "events/LOAD";
 
 const load = (list) => ({
@@ -6,7 +8,7 @@ const load = (list) => ({
 });
 
 export const getEvents = () => async (dispatch) => {
-  const response = await fetch(`/api/events`);
+  const response = await csrfFetch(`/api/events`);
 
   if (response.ok) {
     const list = await response.json();
@@ -32,8 +34,8 @@ const eventsReducer = (state = initialState, action) => {
         allEvents[event.id] = event;
       });
       return {
-        ...allEvents,
         ...state,
+        ...allEvents,
         list: sortList(action.list),
       };
     default:

@@ -25,17 +25,18 @@ function Events() {
         <h2>Events in Leetup</h2>
         {events.map((event) => {
           return (
-            <div>
-              <h3>{event.name}</h3>
-              <ul>
-                <li>{event.type}</li>
-                <li>{event.startDate}</li>
-                <li>{event.endDate}</li>
-                <li>{event.numAttending}</li>
-                <li>{event.Group.name}</li>
-                <li>{event.Venue.id}</li>
-              </ul>
-            </div>
+            <NavLink to={`/events/${event.id}`}>
+              <div>
+                <img src={event.previewImage} alt="leetup Img"></img>
+                <h3>{event.startDate}</h3>
+                <h2>{event.name}</h2>
+                <h3>{event.type}</h3>
+                <h3>
+                  {event.Venue.city} {event.Venue.state}
+                </h3>
+                <h3>{event.description}</h3>
+              </div>
+            </NavLink>
           );
         })}
       </div>

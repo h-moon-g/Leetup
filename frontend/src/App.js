@@ -6,6 +6,11 @@ import Navigation from "./components/Navigation";
 import LandingPage from "./components/LandingPage";
 import Groups from "./components/Groups";
 import Events from "./components/Events";
+import GetOneGroup from "./components/GetOneGroup";
+import GetOneEvent from "./components/GetOneEvent";
+import CreateGroup from "./components/CreateGroup";
+import CreateEvent from "./components/CreateEvent";
+import UpdateGroup from "./components/UpdateGroup";
 
 function App() {
   const dispatch = useDispatch();
@@ -25,8 +30,23 @@ function App() {
           <Route exact path="/groups">
             <Groups />
           </Route>
+          <Route exact path="/groups/new">
+            <CreateGroup />
+          </Route>
+          <Route exact path="/groups/:id/edit">
+            <UpdateGroup />
+          </Route>
+          <Route exact path="/groups/:id/events/new">
+            <CreateEvent />
+          </Route>
+          <Route exact path="/groups/:id">
+            <GetOneGroup />
+          </Route>
           <Route exact path="/events">
             <Events />
+          </Route>
+          <Route exact path="/events/:id">
+            <GetOneEvent />
           </Route>
         </Switch>
       )}
