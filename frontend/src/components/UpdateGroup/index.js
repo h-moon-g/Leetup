@@ -23,8 +23,22 @@ function UpdateGroup() {
 
   let history = useHistory();
 
+  const user = useSelector((state) => state.session.user);
+
   if (!Object.values(group).length) {
     return null;
+  }
+
+  if (user) {
+    if (group) {
+      if (user.id !== group.organizerId) {
+        history.push("/");
+      }
+    } else {
+      history.push("/");
+    }
+  } else {
+    history.push("/");
   }
 
   const handleSubmit = async (e) => {
@@ -55,7 +69,7 @@ function UpdateGroup() {
     <>
       <div id="cg-div">
         <div id="cg-header-div">
-          <h3 id="cg-header">BECOME AN ORGANIZER</h3>
+          <h3 id="cg-header">UPDATE YOUR GROUP</h3>
           <h3>
             We'll walk you through a few steps to build your local community
           </h3>
@@ -163,7 +177,7 @@ function UpdateGroup() {
               {errors.private && <p>{errors.private}</p>}
             </div>
           </div>
-          <button type="submit">Create group</button>
+          <button type="submit">Update Group</button>
         </form>
       </div>
     </>

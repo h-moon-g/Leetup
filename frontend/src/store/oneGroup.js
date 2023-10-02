@@ -45,7 +45,7 @@ export const getOneGroup = (id) => async (dispatch) => {
     if (response.ok) {
       const group = await response.json();
       dispatch(load(group));
-      return group
+      return group;
     }
   } catch (error) {
     // console.error(error);
@@ -96,6 +96,10 @@ export const updateGroup = (group) => async (dispatch) => {
     privacy = true;
   } else if (privacy === "false") {
     privacy = "false";
+  } else if (privacy === false) {
+    privacy = "false";
+  } else if (privacy === true) {
+    privacy = true;
   }
   const response = await csrfFetch(`/api/groups/${id}`, {
     method: "PUT",
