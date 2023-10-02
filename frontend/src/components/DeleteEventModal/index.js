@@ -25,10 +25,16 @@ function DeleteEventModal() {
 
   return (
     <>
-      <h1>Confirm Delete</h1>
-      <h3>Are you sure you want to remove this event?</h3>
-      <button onClick={handleDelete}>Yes Delete Event</button>
-      <button onClick={closeModal}>No Keep Event</button>
+      <h1 className="dm-title-txt">Confirm Delete</h1>
+      <h3 className="dm-confirm-txt">
+        Are you sure you want to remove this event?
+      </h3>
+      <button className="dm-delete-button" onClick={handleDelete}>
+        Yes (Delete Event)
+      </button>
+      <button className="dm-close-delete-button" onClick={closeModal}>
+        No (Keep Event)
+      </button>
     </>
   );
 }

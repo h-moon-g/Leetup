@@ -10,14 +10,6 @@ import { useDispatch, useSelector } from "react-redux";
 function Groups() {
   const dispatch = useDispatch();
 
-  const groups = useSelector((state) => {
-    return state.groups.list.map((groupId) => state.groups[groupId]);
-  });
-
-  const events = useSelector((state) => {
-    return state.events.list.map((eventId) => state.events[eventId]);
-  });
-
   useEffect(() => {
     dispatch(getGroups());
   }, [dispatch]);
@@ -26,12 +18,24 @@ function Groups() {
     dispatch(getEvents());
   }, [dispatch]);
 
+  const groups = useSelector((state) => {
+    return state.groups.list.map((groupId) => state.groups[groupId]);
+  });
+
+  const events = useSelector((state) => {
+    return state.events.list.map((eventId) => state.events[eventId]);
+  });
+
   return (
     <>
-      <div>
-        <NavLink to="/events">Events</NavLink>
-        <h2>Groups</h2>
-        <h2>Groups in Leetup</h2>
+      <div className="wrapper-div">
+        <div id="top-text">
+          <div id="events-groups-div">
+            <NavLink to="/events">Events</NavLink>
+            <h2>Groups</h2>
+          </div>
+          <h2>Groups in Leetup</h2>
+        </div>
         {groups.map((group) => {
           let groupPrivacy;
           let numEvents = 0;
@@ -52,18 +56,21 @@ function Groups() {
             groupPrivacy = "Private";
           }
           return (
-            <NavLink to={`/groups/${group.id}`}>
-              <div>
-                <h3>{group.name}</h3>
-                <img src={group.previewImage} alt="leetup Img"></img>
-                <ul>
-                  <li>{group.about}</li>
-                  <li>{location}</li>
-                  <li>{groupPrivacy}</li>
-                  <li>{numEvents}</li>
-                </ul>
-              </div>
-            </NavLink>
+            <div className="map-wrapper-div">
+              <NavLink to={`/groups/${group.id}`} id="a-link">
+                <div id="img-div">
+                  <img src={group.previewImage} alt="leetup Img"></img>
+                </div>
+                <div id="content-div">
+                  <h3>{group.name}</h3>
+                  <h4>{location}</h4>
+                  <h5>{group.about}</h5>
+                  <h4>
+                    {numEvents} · {groupPrivacy}
+                  </h4>
+                </div>
+              </NavLink>
+            </div>
           );
         })}
       </div>

@@ -29,32 +29,49 @@ function LoginFormModal() {
     return dispatch(sessionActions.demoUser()).then(closeModal);
   };
 
+  let loginButton;
+  if (credential.length >= 4 && password.length >= 6) {
+    loginButton = (
+      <button type="submit" id="login-button">
+        Log In
+      </button>
+    );
+  } else {
+    loginButton = (
+      <button type="submit" disabled id="login-disabled-button">
+        Log In
+      </button>
+    );
+  }
+
   return (
     <>
-      <h1>Log In</h1>
-      <form onSubmit={handleSubmit}>
-        <label>
-          Username or Email
+      <div id="login-div">
+        <h1 id="login-txt">Log In</h1>
+        <form onSubmit={handleSubmit}>
           <input
+            id="credential-input"
             type="text"
+            placeholder="Username or Email"
             value={credential}
             onChange={(e) => setCredential(e.target.value)}
             required
           />
-        </label>
-        <label>
-          Password
           <input
+            id="password-input"
             type="password"
+            placeholder="Password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
           />
-        </label>
-        {errors.credential && <p>{errors.credential}</p>}
-        <button type="submit">Log In</button>
-        <button onClick={handleDemoUser}>Demo User</button>
-      </form>
+          {errors.credential && <p>{errors.credential}</p>}
+          {loginButton}
+          <button onClick={handleDemoUser} id="demouser-button">
+            Demo User
+          </button>
+        </form>
+      </div>
     </>
   );
 }

@@ -1,0 +1,28 @@
+.dm-delete-button {
+  width: 60%;
+  margin-bottom: 21.44px;
+  padding: 10px 0;
+  background-color: indianred;
+  color: white;
+}
+
+.dm-delete-button:hover {
+  cursor: pointer;
+}
+
+.dm-close-delete-button:hover {
+  cursor: pointer;
+}
+
+.dm-close-delete-button {
+  width: 60%;
+  margin-bottom: 21.44px;
+  padding: 10px 0;
+  color: white;
+  background-color: lightgrey;
+}
+
+.dm-confirm-txt {
+  margin: 0;
+  margin-bottom: 21.44px;
+}

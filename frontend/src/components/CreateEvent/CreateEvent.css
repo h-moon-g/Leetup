@@ -1,0 +1,115 @@
+#ce-form {
+  width: 60%;
+  margin-left: 20%;
+}
+
+#ce-name-div {
+  border-bottom: 1px solid lightgrey;
+  padding-bottom: 18.72px;
+}
+
+#ce-name-div > p {
+  margin: 0;
+  position: absolute;
+}
+
+#ce-name-div > h5 {
+  margin: 0;
+  margin-bottom: 3px;
+}
+
+#ce-name-div > input:focus {
+  background-color: rgb(203, 234, 251);
+}
+
+#ce-type-price {
+  border-bottom: 1px solid lightgrey;
+  padding-bottom: 18.72px;
+}
+
+#ce-type-price > p {
+  margin: 0;
+  position: absolute;
+}
+
+#ce-type-price > h5 {
+  margin: 0;
+  margin-bottom: 3px;
+  margin-top: 18.72px;
+}
+
+#ce-type-price input:focus {
+  background-color: rgb(203, 234, 251);
+}
+
+#ce-date {
+  border-bottom: 1px solid lightgrey;
+  padding-bottom: 18.72px;
+}
+
+#ce-date > p {
+  margin: 0;
+  position: absolute;
+}
+
+#ce-date > h5 {
+  margin: 0;
+  margin-bottom: 3px;
+  margin-top: 18.72px;
+}
+
+#ce-date input:focus {
+  background-color: rgb(203, 234, 251);
+}
+
+#ce-image {
+  border-bottom: 1px solid lightgrey;
+  padding-bottom: 18.72px;
+}
+
+#ce-image > p {
+  margin: 0;
+  position: absolute;
+}
+
+#ce-image > h5 {
+  margin: 0;
+  margin-bottom: 3px;
+  margin-top: 18.72px;
+}
+
+#ce-image input:focus {
+  background-color: rgb(203, 234, 251);
+}
+
+#ce-describe > textarea {
+  padding-bottom: 150px;
+}
+
+#ce-describe {
+  padding-bottom: 18.72px;
+}
+
+#ce-describe > p {
+  margin: 0;
+  position: absolute;
+}
+
+#ce-describe > h5 {
+  margin: 0;
+  margin-bottom: 3px;
+  margin-top: 18.72px;
+}
+
+#ce-describe input:focus {
+  background-color: rgb(203, 234, 251);
+}
+
+#ce-button > button {
+  background-color: indianred;
+  color: white;
+  padding: 10px 20px;
+  font-size: 16px;
+  box-shadow: 5px 5px 5px black;
+  margin-top: 18.72px;
+}

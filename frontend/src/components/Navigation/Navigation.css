@@ -1,7 +1,93 @@
-p {
-  color: red;
+body {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+#nav-div {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  height: 60px;
+  border-bottom: 1px solid lightgrey;
+}
+
+#li-su-buttons {
+  display: flex;
+  align-items: right;
+  justify-content: right;
+  margin-left: 65%;
+  width: 100%;
+}
+
+#li-su-buttons > button {
+  display: flex;
+  align-items: right;
+  margin-right: 20px;
+  background-color: white;
+  border: none;
+  font-weight: bold;
+}
+
+#li-su-buttons > button:hover {
+  color: indianred;
+  cursor: pointer;
+}
+
+#leetup-link {
+  margin-left: 20px;
+  text-decoration: none;
+  color: indianred;
+  font-size: 35px;
+  font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
 }
 
 .hidden {
   display: none;
+}
+
+#logged-in-div {
+  display: flex;
+  align-items: right;
+  justify-content: right;
+  margin-left: 65%;
+  width: 100%;
+}
+
+#sang-nav-bar-link {
+  text-decoration: none;
+  color: cornflowerblue;
+  margin-top: 6px;
+}
+
+.profile-dropdown {
+  position: absolute;
+  z-index: 1;
+  margin-top: 40px;
+  margin-right: 20px;
+  background-color: white;
+  border: 1px solid black;
+  list-style: none;
+  padding: 10px;
+}
+
+.profile-dropdown > li {
+  margin: 10px;
+}
+
+.profile-dropdown > li > button {
+  background-color: white;
+  border: none;
+  padding-left: 0;
+  font-family: "Times New Roman", Times, serif;
+  font-size: 16px;
+}
+
+.profile-dropdown > li > button:hover {
+  cursor: pointer;
+  color: cornflowerblue;
+}
+
+#logout-li > button:hover {
+  color: indianred;
 }
